@@ -1,0 +1,42 @@
+
+message QCrawlerUrlMeta {
+
+}
+
+message QCrawlerUrl {
+    enum CrawlType {
+       HOST_RESTRICTED = 0;
+    };
+
+    enum LinkType {
+        HTML = 0;
+        IMG = 1;
+        PDF = 2;
+    };
+
+    required string url = 1;
+    optional string normolized_url = 7;
+    optional string url_md5 = 2;
+    optional
+    optional string anchor = 3;
+    required  int32 crawl_level = 4;
+    optional CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
+    optional QCrawlerUrlMeta mate_data = 6;
+    optional LinkType link_type = 8;
+}
+
+message QCrawlerRecord {
+
+    required QCrawlerUrl crawl_url = 1;
+
+    optional string raw_html = 8;
+    optional string raw_title = 2;
+    optional string raw_content = 3;
+    optional string raw_content_md5 = 4;
+
+    repeated QCrawlerUrl raw_sub_links = 5;
+
+    optional string title = 6;
+    optional string content = 7;
+    repeated QCrawlerUrl focused_links = 9;
+}

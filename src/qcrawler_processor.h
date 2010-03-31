@@ -1,5 +1,10 @@
+#ifndef QCRALER_PROCESSOR_H
+#define QCRALER_PROCESSOR_H
+
 #include <QObject>
 #include <QDebug>
+
+#include "qcrawler_common.h"
 
 class QCrawlerProcessor : public QObject
 {
@@ -11,8 +16,10 @@ public:
     }
 
 public slots:
-    void process(bool r);
+    void process(bool r, QCrawlerRecord &rec);
 
 signals:
-    void processFinished(bool);
+    void processFinished(bool, QCrawlerRecord &rec);
 };
+
+#endif

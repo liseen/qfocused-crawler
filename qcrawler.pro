@@ -12,7 +12,9 @@ SOURCES +=\
     ./src/qcrawler_url.cpp\
     ./src/qcrawler_queue.cpp\
     ./src/qcrawler_focus_filter.cpp\
-    ./src/qcrawler_freq_control.cpp
+    ./src/qcrawler_freq_control.cpp\
+    ./src/qcrawler_record.pb.cc\
+    ./src/qcrawler_util.cpp
 
 HEADERS +=\
     ./src/qcrawler_webpage.h\
@@ -23,6 +25,12 @@ HEADERS +=\
     ./src/qcrawler_processor.h\
     ./src/qcrawler.h\
     ./src/qcrawler_parser.h\
-    ./src/qcrawler_focus_filter.h
+    ./src/qcrawler_focus_filter.h\
+    ./src/qcrawler_common.h\
+    ./src/qcrawler_util.h\
+    ./src/qcrawler_eventloop.h\
+    ./src/qcrawler_record.pb.h
 
-QT += network webkit
+
+LIBS = -lprotobuf
+QT += network webkit testlib

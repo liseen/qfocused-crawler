@@ -1,7 +1,7 @@
 #include "qcrawler.h"
 
 void QCrawler::start() {
-    while (true) {
+    //while (true) {
         task->getUrl();
-    }
+    //}
 }
