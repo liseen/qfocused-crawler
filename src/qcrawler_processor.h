@@ -11,7 +11,7 @@ public:
     }
 
 public slots:
-    void process();
+    void process(bool r);
 
 signals:
     void processFinished(bool);

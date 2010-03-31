@@ -11,9 +11,9 @@ public:
     }
 
 public slots:
-    void parser();
+    void parse(bool r);
 
 signals:
-    void parserFinished(bool);
+    void parseFinished(bool);
 
 };

@@ -1,12 +1,8 @@
 #include <QApplication>
 #include <QUrl>
 #include <QDebug>
-#include <QWebView>
-#include <QWebPage>
-#include <QWebFrame>
 
-#include <iostream>
-using namespace std;
+#include "qcrawler.h"
 
 // Get url from queue
 // Get html, raw_title, raw_content, raw_links // parser 
@@ -20,7 +16,7 @@ int main(int argc, char* argv[]) {
     //QWebView* view = new QWebView();
     //view->load(QUrl("http://www.google.com"));
     //view->show();
-
+/*
     QWebPage* page = new QWebPage();
     page->setViewportSize(QSize(1024, 728));
     page->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
@@ -31,6 +27,9 @@ int main(int argc, char* argv[]) {
     cin>>str;
     qDebug() << frame->toHtml() << endl;
     qDebug() << frame->toHtml() << endl;
+*/
 
+    QCrawler* crawler = new QCrawler();
+    crawler->start();
     return app.exec();
 }

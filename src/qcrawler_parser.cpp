@@ -1,7 +1,7 @@
 #include "qcrawler_parser.h"
 
 
-void QCrawler::parser() {
-    QDebug() << "parser\n";
-    emit parserFinished(true);
+void QCrawlerParser::parse(bool r) {
+    qDebug() << "parser\n";
+    emit parseFinished(true);
 }

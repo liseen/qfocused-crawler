@@ -12,7 +12,7 @@ public:
     }
 
 public slots:
-    void nextUrl();
+    void getUrl();
 
 signals:
     void urlGetFinished(bool);
