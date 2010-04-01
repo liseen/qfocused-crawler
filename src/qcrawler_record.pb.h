@@ -35,11 +35,12 @@ class QCrawlerUrl;
 class QCrawlerRecord;
 
 enum QCrawlerUrl_CrawlType {
-  QCrawlerUrl_CrawlType_HOST_RESTRICTED = 0
+  QCrawlerUrl_CrawlType_HOST_RESTRICTED = 0,
+  QCrawlerUrl_CrawlType_UPDATE = 1
 };
 bool QCrawlerUrl_CrawlType_IsValid(int value);
 const QCrawlerUrl_CrawlType QCrawlerUrl_CrawlType_CrawlType_MIN = QCrawlerUrl_CrawlType_HOST_RESTRICTED;
-const QCrawlerUrl_CrawlType QCrawlerUrl_CrawlType_CrawlType_MAX = QCrawlerUrl_CrawlType_HOST_RESTRICTED;
+const QCrawlerUrl_CrawlType QCrawlerUrl_CrawlType_CrawlType_MAX = QCrawlerUrl_CrawlType_UPDATE;
 const int QCrawlerUrl_CrawlType_CrawlType_ARRAYSIZE = QCrawlerUrl_CrawlType_CrawlType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* QCrawlerUrl_CrawlType_descriptor();
@@ -51,6 +52,52 @@ inline bool QCrawlerUrl_CrawlType_Parse(
     const ::std::string& name, QCrawlerUrl_CrawlType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<QCrawlerUrl_CrawlType>(
     QCrawlerUrl_CrawlType_descriptor(), name, value);
+}
+enum QCrawlerUrl_LinkType {
+  QCrawlerUrl_LinkType_HTML = 0,
+  QCrawlerUrl_LinkType_IMG = 1,
+  QCrawlerUrl_LinkType_PDF = 2
+};
+bool QCrawlerUrl_LinkType_IsValid(int value);
+const QCrawlerUrl_LinkType QCrawlerUrl_LinkType_LinkType_MIN = QCrawlerUrl_LinkType_HTML;
+const QCrawlerUrl_LinkType QCrawlerUrl_LinkType_LinkType_MAX = QCrawlerUrl_LinkType_PDF;
+const int QCrawlerUrl_LinkType_LinkType_ARRAYSIZE = QCrawlerUrl_LinkType_LinkType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* QCrawlerUrl_LinkType_descriptor();
+inline const ::std::string& QCrawlerUrl_LinkType_Name(QCrawlerUrl_LinkType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    QCrawlerUrl_LinkType_descriptor(), value);
+}
+inline bool QCrawlerUrl_LinkType_Parse(
+    const ::std::string& name, QCrawlerUrl_LinkType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<QCrawlerUrl_LinkType>(
+    QCrawlerUrl_LinkType_descriptor(), name, value);
+}
+enum QCrawlerUrl_UrlStatus {
+  QCrawlerUrl_UrlStatus_NOT_EXIST = -100,
+  QCrawlerUrl_UrlStatus_NOT_CRAWLED = 0,
+  QCrawlerUrl_UrlStatus_CRAWLED_OK = 1,
+  QCrawlerUrl_UrlStatus_NOT_NEED_CRAWL = 10,
+  QCrawlerUrl_UrlStatus_FAILED_CRAWL_1 = -1,
+  QCrawlerUrl_UrlStatus_FAILED_CRAWL_2 = -2,
+  QCrawlerUrl_UrlStatus_FAILED_CRAWL_3 = -3,
+  QCrawlerUrl_UrlStatus_FAILED_CRAWL_4 = -4,
+  QCrawlerUrl_UrlStatus_FAILED_CRAWL_5 = -5
+};
+bool QCrawlerUrl_UrlStatus_IsValid(int value);
+const QCrawlerUrl_UrlStatus QCrawlerUrl_UrlStatus_UrlStatus_MIN = QCrawlerUrl_UrlStatus_NOT_EXIST;
+const QCrawlerUrl_UrlStatus QCrawlerUrl_UrlStatus_UrlStatus_MAX = QCrawlerUrl_UrlStatus_NOT_NEED_CRAWL;
+const int QCrawlerUrl_UrlStatus_UrlStatus_ARRAYSIZE = QCrawlerUrl_UrlStatus_UrlStatus_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* QCrawlerUrl_UrlStatus_descriptor();
+inline const ::std::string& QCrawlerUrl_UrlStatus_Name(QCrawlerUrl_UrlStatus value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    QCrawlerUrl_UrlStatus_descriptor(), value);
+}
+inline bool QCrawlerUrl_UrlStatus_Parse(
+    const ::std::string& name, QCrawlerUrl_UrlStatus* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<QCrawlerUrl_UrlStatus>(
+    QCrawlerUrl_UrlStatus_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -189,6 +236,7 @@ class QCrawlerUrl : public ::google::protobuf::Message {
   
   typedef QCrawlerUrl_CrawlType CrawlType;
   static const CrawlType HOST_RESTRICTED = QCrawlerUrl_CrawlType_HOST_RESTRICTED;
+  static const CrawlType UPDATE = QCrawlerUrl_CrawlType_UPDATE;
   static inline bool CrawlType_IsValid(int value) {
     return QCrawlerUrl_CrawlType_IsValid(value);
   }
@@ -210,6 +258,62 @@ class QCrawlerUrl : public ::google::protobuf::Message {
     return QCrawlerUrl_CrawlType_Parse(name, value);
   }
   
+  typedef QCrawlerUrl_LinkType LinkType;
+  static const LinkType HTML = QCrawlerUrl_LinkType_HTML;
+  static const LinkType IMG = QCrawlerUrl_LinkType_IMG;
+  static const LinkType PDF = QCrawlerUrl_LinkType_PDF;
+  static inline bool LinkType_IsValid(int value) {
+    return QCrawlerUrl_LinkType_IsValid(value);
+  }
+  static const LinkType LinkType_MIN =
+    QCrawlerUrl_LinkType_LinkType_MIN;
+  static const LinkType LinkType_MAX =
+    QCrawlerUrl_LinkType_LinkType_MAX;
+  static const int LinkType_ARRAYSIZE =
+    QCrawlerUrl_LinkType_LinkType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  LinkType_descriptor() {
+    return QCrawlerUrl_LinkType_descriptor();
+  }
+  static inline const ::std::string& LinkType_Name(LinkType value) {
+    return QCrawlerUrl_LinkType_Name(value);
+  }
+  static inline bool LinkType_Parse(const ::std::string& name,
+      LinkType* value) {
+    return QCrawlerUrl_LinkType_Parse(name, value);
+  }
+  
+  typedef QCrawlerUrl_UrlStatus UrlStatus;
+  static const UrlStatus NOT_EXIST = QCrawlerUrl_UrlStatus_NOT_EXIST;
+  static const UrlStatus NOT_CRAWLED = QCrawlerUrl_UrlStatus_NOT_CRAWLED;
+  static const UrlStatus CRAWLED_OK = QCrawlerUrl_UrlStatus_CRAWLED_OK;
+  static const UrlStatus NOT_NEED_CRAWL = QCrawlerUrl_UrlStatus_NOT_NEED_CRAWL;
+  static const UrlStatus FAILED_CRAWL_1 = QCrawlerUrl_UrlStatus_FAILED_CRAWL_1;
+  static const UrlStatus FAILED_CRAWL_2 = QCrawlerUrl_UrlStatus_FAILED_CRAWL_2;
+  static const UrlStatus FAILED_CRAWL_3 = QCrawlerUrl_UrlStatus_FAILED_CRAWL_3;
+  static const UrlStatus FAILED_CRAWL_4 = QCrawlerUrl_UrlStatus_FAILED_CRAWL_4;
+  static const UrlStatus FAILED_CRAWL_5 = QCrawlerUrl_UrlStatus_FAILED_CRAWL_5;
+  static inline bool UrlStatus_IsValid(int value) {
+    return QCrawlerUrl_UrlStatus_IsValid(value);
+  }
+  static const UrlStatus UrlStatus_MIN =
+    QCrawlerUrl_UrlStatus_UrlStatus_MIN;
+  static const UrlStatus UrlStatus_MAX =
+    QCrawlerUrl_UrlStatus_UrlStatus_MAX;
+  static const int UrlStatus_ARRAYSIZE =
+    QCrawlerUrl_UrlStatus_UrlStatus_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  UrlStatus_descriptor() {
+    return QCrawlerUrl_UrlStatus_descriptor();
+  }
+  static inline const ::std::string& UrlStatus_Name(UrlStatus value) {
+    return QCrawlerUrl_UrlStatus_Name(value);
+  }
+  static inline bool UrlStatus_Parse(const ::std::string& name,
+      UrlStatus* value) {
+    return QCrawlerUrl_UrlStatus_Parse(name, value);
+  }
+  
   // accessors -------------------------------------------------------
   
   // required string url = 1;
@@ -222,56 +326,77 @@ class QCrawlerUrl : public ::google::protobuf::Message {
   inline void set_url(const char* value, size_t size);
   inline ::std::string* mutable_url();
   
-  // optional string normolized_url = 7;
-  inline bool has_normolized_url() const;
-  inline void clear_normolized_url();
-  static const int kNormolizedUrlFieldNumber = 7;
-  inline const ::std::string& normolized_url() const;
-  inline void set_normolized_url(const ::std::string& value);
-  inline void set_normolized_url(const char* value);
-  inline void set_normolized_url(const char* value, size_t size);
-  inline ::std::string* mutable_normolized_url();
+  // optional .QCrawlerUrl.UrlStatus url_status = 10 [default = NOT_CRAWLED];
+  inline bool has_url_status() const;
+  inline void clear_url_status();
+  static const int kUrlStatusFieldNumber = 10;
+  inline ::QCrawlerUrl_UrlStatus url_status() const;
+  inline void set_url_status(::QCrawlerUrl_UrlStatus value);
   
-  // optional string url_md5 = 2;
+  // optional string host = 2;
+  inline bool has_host() const;
+  inline void clear_host();
+  static const int kHostFieldNumber = 2;
+  inline const ::std::string& host() const;
+  inline void set_host(const ::std::string& value);
+  inline void set_host(const char* value);
+  inline void set_host(const char* value, size_t size);
+  inline ::std::string* mutable_host();
+  
+  // optional string url_md5 = 3;
   inline bool has_url_md5() const;
   inline void clear_url_md5();
-  static const int kUrlMd5FieldNumber = 2;
+  static const int kUrlMd5FieldNumber = 3;
   inline const ::std::string& url_md5() const;
   inline void set_url_md5(const ::std::string& value);
   inline void set_url_md5(const char* value);
   inline void set_url_md5(const char* value, size_t size);
   inline ::std::string* mutable_url_md5();
   
-  // optional string anchor = 3;
-  inline bool has_anchor() const;
-  inline void clear_anchor();
-  static const int kAnchorFieldNumber = 3;
-  inline const ::std::string& anchor() const;
-  inline void set_anchor(const ::std::string& value);
-  inline void set_anchor(const char* value);
-  inline void set_anchor(const char* value, size_t size);
-  inline ::std::string* mutable_anchor();
+  // optional string anchor_text = 4;
+  inline bool has_anchor_text() const;
+  inline void clear_anchor_text();
+  static const int kAnchorTextFieldNumber = 4;
+  inline const ::std::string& anchor_text() const;
+  inline void set_anchor_text(const ::std::string& value);
+  inline void set_anchor_text(const char* value);
+  inline void set_anchor_text(const char* value, size_t size);
+  inline ::std::string* mutable_anchor_text();
   
-  // required int32 crawl_level = 4;
+  // optional int32 failed_times = 5;
+  inline bool has_failed_times() const;
+  inline void clear_failed_times();
+  static const int kFailedTimesFieldNumber = 5;
+  inline ::google::protobuf::int32 failed_times() const;
+  inline void set_failed_times(::google::protobuf::int32 value);
+  
+  // required int32 crawl_level = 6;
   inline bool has_crawl_level() const;
   inline void clear_crawl_level();
-  static const int kCrawlLevelFieldNumber = 4;
+  static const int kCrawlLevelFieldNumber = 6;
   inline ::google::protobuf::int32 crawl_level() const;
   inline void set_crawl_level(::google::protobuf::int32 value);
   
-  // optional .QCrawlerUrl.CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
+  // optional .QCrawlerUrl.CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
   inline bool has_crawl_type() const;
   inline void clear_crawl_type();
-  static const int kCrawlTypeFieldNumber = 5;
+  static const int kCrawlTypeFieldNumber = 7;
   inline ::QCrawlerUrl_CrawlType crawl_type() const;
   inline void set_crawl_type(::QCrawlerUrl_CrawlType value);
   
-  // optional .QCrawlerUrlMeta mate_data = 6;
+  // optional .QCrawlerUrlMeta mate_data = 8;
   inline bool has_mate_data() const;
   inline void clear_mate_data();
-  static const int kMateDataFieldNumber = 6;
+  static const int kMateDataFieldNumber = 8;
   inline const ::QCrawlerUrlMeta& mate_data() const;
   inline ::QCrawlerUrlMeta* mutable_mate_data();
+  
+  // optional .QCrawlerUrl.LinkType link_type = 9;
+  inline bool has_link_type() const;
+  inline void clear_link_type();
+  static const int kLinkTypeFieldNumber = 9;
+  inline ::QCrawlerUrl_LinkType link_type() const;
+  inline void set_link_type(::QCrawlerUrl_LinkType value);
   
   // @@protoc_insertion_point(class_scope:QCrawlerUrl)
  private:
@@ -280,20 +405,23 @@ class QCrawlerUrl : public ::google::protobuf::Message {
   
   ::std::string* url_;
   static const ::std::string _default_url_;
-  ::std::string* normolized_url_;
-  static const ::std::string _default_normolized_url_;
+  int url_status_;
+  ::std::string* host_;
+  static const ::std::string _default_host_;
   ::std::string* url_md5_;
   static const ::std::string _default_url_md5_;
-  ::std::string* anchor_;
-  static const ::std::string _default_anchor_;
+  ::std::string* anchor_text_;
+  static const ::std::string _default_anchor_text_;
+  ::google::protobuf::int32 failed_times_;
   ::google::protobuf::int32 crawl_level_;
   int crawl_type_;
   ::QCrawlerUrlMeta* mate_data_;
+  int link_type_;
   friend void  protobuf_AddDesc_qcrawler_5frecord_2eproto();
   friend void protobuf_AssignDesc_qcrawler_5frecord_2eproto();
   friend void protobuf_ShutdownFile_qcrawler_5frecord_2eproto();
   
-  ::google::protobuf::uint32 _has_bits_[(7 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(10 + 31) / 32];
   
   // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
   inline bool _has_bit(int index) const {
@@ -444,6 +572,32 @@ class QCrawlerRecord : public ::google::protobuf::Message {
   inline void set_content(const char* value, size_t size);
   inline ::std::string* mutable_content();
   
+  // repeated .QCrawlerUrl focused_links = 9;
+  inline int focused_links_size() const;
+  inline void clear_focused_links();
+  static const int kFocusedLinksFieldNumber = 9;
+  inline const ::QCrawlerUrl& focused_links(int index) const;
+  inline ::QCrawlerUrl* mutable_focused_links(int index);
+  inline ::QCrawlerUrl* add_focused_links();
+  inline const ::google::protobuf::RepeatedPtrField< ::QCrawlerUrl >&
+      focused_links() const;
+  inline ::google::protobuf::RepeatedPtrField< ::QCrawlerUrl >*
+      mutable_focused_links();
+  
+  // optional int32 download_time = 10;
+  inline bool has_download_time() const;
+  inline void clear_download_time();
+  static const int kDownloadTimeFieldNumber = 10;
+  inline ::google::protobuf::int32 download_time() const;
+  inline void set_download_time(::google::protobuf::int32 value);
+  
+  // optional int32 last_modified = 11;
+  inline bool has_last_modified() const;
+  inline void clear_last_modified();
+  static const int kLastModifiedFieldNumber = 11;
+  inline ::google::protobuf::int32 last_modified() const;
+  inline void set_last_modified(::google::protobuf::int32 value);
+  
   // @@protoc_insertion_point(class_scope:QCrawlerRecord)
  private:
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -463,11 +617,14 @@ class QCrawlerRecord : public ::google::protobuf::Message {
   static const ::std::string _default_title_;
   ::std::string* content_;
   static const ::std::string _default_content_;
+  ::google::protobuf::RepeatedPtrField< ::QCrawlerUrl > focused_links_;
+  ::google::protobuf::int32 download_time_;
+  ::google::protobuf::int32 last_modified_;
   friend void  protobuf_AddDesc_qcrawler_5frecord_2eproto();
   friend void protobuf_AssignDesc_qcrawler_5frecord_2eproto();
   friend void protobuf_ShutdownFile_qcrawler_5frecord_2eproto();
   
-  ::google::protobuf::uint32 _has_bits_[(8 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
   
   // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
   inline bool _has_bit(int index) const {
@@ -536,180 +693,230 @@ inline ::std::string* QCrawlerUrl::mutable_url() {
   return url_;
 }
 
-// optional string normolized_url = 7;
-inline bool QCrawlerUrl::has_normolized_url() const {
+// optional .QCrawlerUrl.UrlStatus url_status = 10 [default = NOT_CRAWLED];
+inline bool QCrawlerUrl::has_url_status() const {
   return _has_bit(1);
 }
-inline void QCrawlerUrl::clear_normolized_url() {
-  if (normolized_url_ != &_default_normolized_url_) {
-    normolized_url_->clear();
-  }
+inline void QCrawlerUrl::clear_url_status() {
+  url_status_ = 0;
   _clear_bit(1);
 }
-inline const ::std::string& QCrawlerUrl::normolized_url() const {
-  return *normolized_url_;
+inline ::QCrawlerUrl_UrlStatus QCrawlerUrl::url_status() const {
+  return static_cast< ::QCrawlerUrl_UrlStatus >(url_status_);
 }
-inline void QCrawlerUrl::set_normolized_url(const ::std::string& value) {
+inline void QCrawlerUrl::set_url_status(::QCrawlerUrl_UrlStatus value) {
+  GOOGLE_DCHECK(::QCrawlerUrl_UrlStatus_IsValid(value));
   _set_bit(1);
-  if (normolized_url_ == &_default_normolized_url_) {
-    normolized_url_ = new ::std::string;
-  }
-  normolized_url_->assign(value);
-}
-inline void QCrawlerUrl::set_normolized_url(const char* value) {
-  _set_bit(1);
-  if (normolized_url_ == &_default_normolized_url_) {
-    normolized_url_ = new ::std::string;
-  }
-  normolized_url_->assign(value);
-}
-inline void QCrawlerUrl::set_normolized_url(const char* value, size_t size) {
-  _set_bit(1);
-  if (normolized_url_ == &_default_normolized_url_) {
-    normolized_url_ = new ::std::string;
-  }
-  normolized_url_->assign(reinterpret_cast<const char*>(value), size);
-}
-inline ::std::string* QCrawlerUrl::mutable_normolized_url() {
-  _set_bit(1);
-  if (normolized_url_ == &_default_normolized_url_) {
-    normolized_url_ = new ::std::string;
-  }
-  return normolized_url_;
+  url_status_ = value;
 }
 
-// optional string url_md5 = 2;
-inline bool QCrawlerUrl::has_url_md5() const {
+// optional string host = 2;
+inline bool QCrawlerUrl::has_host() const {
   return _has_bit(2);
+}
+inline void QCrawlerUrl::clear_host() {
+  if (host_ != &_default_host_) {
+    host_->clear();
+  }
+  _clear_bit(2);
+}
+inline const ::std::string& QCrawlerUrl::host() const {
+  return *host_;
+}
+inline void QCrawlerUrl::set_host(const ::std::string& value) {
+  _set_bit(2);
+  if (host_ == &_default_host_) {
+    host_ = new ::std::string;
+  }
+  host_->assign(value);
+}
+inline void QCrawlerUrl::set_host(const char* value) {
+  _set_bit(2);
+  if (host_ == &_default_host_) {
+    host_ = new ::std::string;
+  }
+  host_->assign(value);
+}
+inline void QCrawlerUrl::set_host(const char* value, size_t size) {
+  _set_bit(2);
+  if (host_ == &_default_host_) {
+    host_ = new ::std::string;
+  }
+  host_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* QCrawlerUrl::mutable_host() {
+  _set_bit(2);
+  if (host_ == &_default_host_) {
+    host_ = new ::std::string;
+  }
+  return host_;
+}
+
+// optional string url_md5 = 3;
+inline bool QCrawlerUrl::has_url_md5() const {
+  return _has_bit(3);
 }
 inline void QCrawlerUrl::clear_url_md5() {
   if (url_md5_ != &_default_url_md5_) {
     url_md5_->clear();
   }
-  _clear_bit(2);
+  _clear_bit(3);
 }
 inline const ::std::string& QCrawlerUrl::url_md5() const {
   return *url_md5_;
 }
 inline void QCrawlerUrl::set_url_md5(const ::std::string& value) {
-  _set_bit(2);
+  _set_bit(3);
   if (url_md5_ == &_default_url_md5_) {
     url_md5_ = new ::std::string;
   }
   url_md5_->assign(value);
 }
 inline void QCrawlerUrl::set_url_md5(const char* value) {
-  _set_bit(2);
+  _set_bit(3);
   if (url_md5_ == &_default_url_md5_) {
     url_md5_ = new ::std::string;
   }
   url_md5_->assign(value);
 }
 inline void QCrawlerUrl::set_url_md5(const char* value, size_t size) {
-  _set_bit(2);
+  _set_bit(3);
   if (url_md5_ == &_default_url_md5_) {
     url_md5_ = new ::std::string;
   }
   url_md5_->assign(reinterpret_cast<const char*>(value), size);
 }
 inline ::std::string* QCrawlerUrl::mutable_url_md5() {
-  _set_bit(2);
+  _set_bit(3);
   if (url_md5_ == &_default_url_md5_) {
     url_md5_ = new ::std::string;
   }
   return url_md5_;
 }
 
-// optional string anchor = 3;
-inline bool QCrawlerUrl::has_anchor() const {
-  return _has_bit(3);
+// optional string anchor_text = 4;
+inline bool QCrawlerUrl::has_anchor_text() const {
+  return _has_bit(4);
 }
-inline void QCrawlerUrl::clear_anchor() {
-  if (anchor_ != &_default_anchor_) {
-    anchor_->clear();
+inline void QCrawlerUrl::clear_anchor_text() {
+  if (anchor_text_ != &_default_anchor_text_) {
+    anchor_text_->clear();
   }
-  _clear_bit(3);
+  _clear_bit(4);
 }
-inline const ::std::string& QCrawlerUrl::anchor() const {
-  return *anchor_;
+inline const ::std::string& QCrawlerUrl::anchor_text() const {
+  return *anchor_text_;
 }
-inline void QCrawlerUrl::set_anchor(const ::std::string& value) {
-  _set_bit(3);
-  if (anchor_ == &_default_anchor_) {
-    anchor_ = new ::std::string;
+inline void QCrawlerUrl::set_anchor_text(const ::std::string& value) {
+  _set_bit(4);
+  if (anchor_text_ == &_default_anchor_text_) {
+    anchor_text_ = new ::std::string;
   }
-  anchor_->assign(value);
+  anchor_text_->assign(value);
 }
-inline void QCrawlerUrl::set_anchor(const char* value) {
-  _set_bit(3);
-  if (anchor_ == &_default_anchor_) {
-    anchor_ = new ::std::string;
+inline void QCrawlerUrl::set_anchor_text(const char* value) {
+  _set_bit(4);
+  if (anchor_text_ == &_default_anchor_text_) {
+    anchor_text_ = new ::std::string;
   }
-  anchor_->assign(value);
+  anchor_text_->assign(value);
 }
-inline void QCrawlerUrl::set_anchor(const char* value, size_t size) {
-  _set_bit(3);
-  if (anchor_ == &_default_anchor_) {
-    anchor_ = new ::std::string;
+inline void QCrawlerUrl::set_anchor_text(const char* value, size_t size) {
+  _set_bit(4);
+  if (anchor_text_ == &_default_anchor_text_) {
+    anchor_text_ = new ::std::string;
   }
-  anchor_->assign(reinterpret_cast<const char*>(value), size);
+  anchor_text_->assign(reinterpret_cast<const char*>(value), size);
 }
-inline ::std::string* QCrawlerUrl::mutable_anchor() {
-  _set_bit(3);
-  if (anchor_ == &_default_anchor_) {
-    anchor_ = new ::std::string;
+inline ::std::string* QCrawlerUrl::mutable_anchor_text() {
+  _set_bit(4);
+  if (anchor_text_ == &_default_anchor_text_) {
+    anchor_text_ = new ::std::string;
   }
-  return anchor_;
+  return anchor_text_;
 }
 
-// required int32 crawl_level = 4;
+// optional int32 failed_times = 5;
+inline bool QCrawlerUrl::has_failed_times() const {
+  return _has_bit(5);
+}
+inline void QCrawlerUrl::clear_failed_times() {
+  failed_times_ = 0;
+  _clear_bit(5);
+}
+inline ::google::protobuf::int32 QCrawlerUrl::failed_times() const {
+  return failed_times_;
+}
+inline void QCrawlerUrl::set_failed_times(::google::protobuf::int32 value) {
+  _set_bit(5);
+  failed_times_ = value;
+}
+
+// required int32 crawl_level = 6;
 inline bool QCrawlerUrl::has_crawl_level() const {
-  return _has_bit(4);
+  return _has_bit(6);
 }
 inline void QCrawlerUrl::clear_crawl_level() {
   crawl_level_ = 0;
-  _clear_bit(4);
+  _clear_bit(6);
 }
 inline ::google::protobuf::int32 QCrawlerUrl::crawl_level() const {
   return crawl_level_;
 }
 inline void QCrawlerUrl::set_crawl_level(::google::protobuf::int32 value) {
-  _set_bit(4);
+  _set_bit(6);
   crawl_level_ = value;
 }
 
-// optional .QCrawlerUrl.CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
+// optional .QCrawlerUrl.CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
 inline bool QCrawlerUrl::has_crawl_type() const {
-  return _has_bit(5);
+  return _has_bit(7);
 }
 inline void QCrawlerUrl::clear_crawl_type() {
   crawl_type_ = 0;
-  _clear_bit(5);
+  _clear_bit(7);
 }
 inline ::QCrawlerUrl_CrawlType QCrawlerUrl::crawl_type() const {
   return static_cast< ::QCrawlerUrl_CrawlType >(crawl_type_);
 }
 inline void QCrawlerUrl::set_crawl_type(::QCrawlerUrl_CrawlType value) {
   GOOGLE_DCHECK(::QCrawlerUrl_CrawlType_IsValid(value));
-  _set_bit(5);
+  _set_bit(7);
   crawl_type_ = value;
 }
 
-// optional .QCrawlerUrlMeta mate_data = 6;
+// optional .QCrawlerUrlMeta mate_data = 8;
 inline bool QCrawlerUrl::has_mate_data() const {
-  return _has_bit(6);
+  return _has_bit(8);
 }
 inline void QCrawlerUrl::clear_mate_data() {
   if (mate_data_ != NULL) mate_data_->::QCrawlerUrlMeta::Clear();
-  _clear_bit(6);
+  _clear_bit(8);
 }
 inline const ::QCrawlerUrlMeta& QCrawlerUrl::mate_data() const {
   return mate_data_ != NULL ? *mate_data_ : *default_instance_->mate_data_;
 }
 inline ::QCrawlerUrlMeta* QCrawlerUrl::mutable_mate_data() {
-  _set_bit(6);
+  _set_bit(8);
   if (mate_data_ == NULL) mate_data_ = new ::QCrawlerUrlMeta;
   return mate_data_;
+}
+
+// optional .QCrawlerUrl.LinkType link_type = 9;
+inline bool QCrawlerUrl::has_link_type() const {
+  return _has_bit(9);
+}
+inline void QCrawlerUrl::clear_link_type() {
+  link_type_ = 0;
+  _clear_bit(9);
+}
+inline ::QCrawlerUrl_LinkType QCrawlerUrl::link_type() const {
+  return static_cast< ::QCrawlerUrl_LinkType >(link_type_);
+}
+inline void QCrawlerUrl::set_link_type(::QCrawlerUrl_LinkType value) {
+  GOOGLE_DCHECK(::QCrawlerUrl_LinkType_IsValid(value));
+  _set_bit(9);
+  link_type_ = value;
 }
 
 // -------------------------------------------------------------------
@@ -1010,6 +1217,63 @@ inline ::std::string* QCrawlerRecord::mutable_content() {
   return content_;
 }
 
+// repeated .QCrawlerUrl focused_links = 9;
+inline int QCrawlerRecord::focused_links_size() const {
+  return focused_links_.size();
+}
+inline void QCrawlerRecord::clear_focused_links() {
+  focused_links_.Clear();
+}
+inline const ::QCrawlerUrl& QCrawlerRecord::focused_links(int index) const {
+  return focused_links_.Get(index);
+}
+inline ::QCrawlerUrl* QCrawlerRecord::mutable_focused_links(int index) {
+  return focused_links_.Mutable(index);
+}
+inline ::QCrawlerUrl* QCrawlerRecord::add_focused_links() {
+  return focused_links_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::QCrawlerUrl >&
+QCrawlerRecord::focused_links() const {
+  return focused_links_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::QCrawlerUrl >*
+QCrawlerRecord::mutable_focused_links() {
+  return &focused_links_;
+}
+
+// optional int32 download_time = 10;
+inline bool QCrawlerRecord::has_download_time() const {
+  return _has_bit(9);
+}
+inline void QCrawlerRecord::clear_download_time() {
+  download_time_ = 0;
+  _clear_bit(9);
+}
+inline ::google::protobuf::int32 QCrawlerRecord::download_time() const {
+  return download_time_;
+}
+inline void QCrawlerRecord::set_download_time(::google::protobuf::int32 value) {
+  _set_bit(9);
+  download_time_ = value;
+}
+
+// optional int32 last_modified = 11;
+inline bool QCrawlerRecord::has_last_modified() const {
+  return _has_bit(10);
+}
+inline void QCrawlerRecord::clear_last_modified() {
+  last_modified_ = 0;
+  _clear_bit(10);
+}
+inline ::google::protobuf::int32 QCrawlerRecord::last_modified() const {
+  return last_modified_;
+}
+inline void QCrawlerRecord::set_last_modified(::google::protobuf::int32 value) {
+  _set_bit(10);
+  last_modified_ = value;
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -1020,6 +1284,14 @@ namespace protobuf {
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::QCrawlerUrl_CrawlType>() {
   return ::QCrawlerUrl_CrawlType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::QCrawlerUrl_LinkType>() {
+  return ::QCrawlerUrl_LinkType_descriptor();
+}
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::QCrawlerUrl_UrlStatus>() {
+  return ::QCrawlerUrl_UrlStatus_descriptor();
 }
 
 }  // namespace google

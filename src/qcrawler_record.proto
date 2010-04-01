@@ -6,6 +6,7 @@ message QCrawlerUrlMeta {
 message QCrawlerUrl {
     enum CrawlType {
        HOST_RESTRICTED = 0;
+       UPDATE = 1;
     };
 
     enum LinkType {
@@ -14,15 +15,31 @@ message QCrawlerUrl {
         PDF = 2;
     };
 
-    required string url = 1;
-    optional string normolized_url = 7;
-    optional string url_md5 = 2;
-    optional
-    optional string anchor = 3;
-    required  int32 crawl_level = 4;
-    optional CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
-    optional QCrawlerUrlMeta mate_data = 6;
-    optional LinkType link_type = 8;
+    enum UrlStatus {
+        NOT_EXIST = -100;
+        NOT_CRAWLED = 0;
+
+        CRAWLED_OK = 1;
+
+        NOT_NEED_CRAWL = 10;
+
+        FAILED_CRAWL_1 = -1;
+        FAILED_CRAWL_2 = -2;
+        FAILED_CRAWL_3 = -3;
+        FAILED_CRAWL_4 = -4;
+        FAILED_CRAWL_5 = -5;
+    };
+
+    required string url = 1; //must be normalized url
+    optional UrlStatus url_status = 10 [default = NOT_CRAWLED];
+    optional string host = 2;
+    optional string url_md5 = 3;
+    optional string anchor_text = 4;
+    optional int32 failed_times = 5;
+    required  int32 crawl_level = 6;
+    optional CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
+    optional QCrawlerUrlMeta mate_data = 8;
+    optional LinkType link_type = 9;
 }
 
 message QCrawlerRecord {
@@ -39,4 +56,6 @@ message QCrawlerRecord {
     optional string title = 6;
     optional string content = 7;
     repeated QCrawlerUrl focused_links = 9;
+    optional int32 download_time = 10;
+    optional int32 last_modified = 11;
 }

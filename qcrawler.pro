@@ -32,5 +32,5 @@ HEADERS +=\
     ./src/qcrawler_record.pb.h
 
 
-LIBS = -lprotobuf
+LIBS = -lprotobuf -L/usr/local/lib -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc
 QT += network webkit testlib

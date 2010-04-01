@@ -2,5 +2,5 @@
 
 
 void QCrawlerProcessor::process(bool r, QCrawlerRecord &rec) {
-    qDebug() << "process\n";
+     emit processFinished(r, rec);
 }

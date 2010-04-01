@@ -19,6 +19,8 @@ const ::google::protobuf::Descriptor* QCrawlerUrl_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   QCrawlerUrl_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* QCrawlerUrl_CrawlType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* QCrawlerUrl_LinkType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* QCrawlerUrl_UrlStatus_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* QCrawlerRecord_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   QCrawlerRecord_reflection_ = NULL;
@@ -47,14 +49,17 @@ void protobuf_AssignDesc_qcrawler_5frecord_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(QCrawlerUrlMeta));
   QCrawlerUrl_descriptor_ = file->message_type(1);
-  static const int QCrawlerUrl_offsets_[7] = {
+  static const int QCrawlerUrl_offsets_[10] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, url_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, normolized_url_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, url_status_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, host_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, url_md5_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, anchor_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, anchor_text_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, failed_times_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, crawl_level_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, crawl_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, mate_data_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerUrl, link_type_),
   };
   QCrawlerUrl_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -68,8 +73,10 @@ void protobuf_AssignDesc_qcrawler_5frecord_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(QCrawlerUrl));
   QCrawlerUrl_CrawlType_descriptor_ = QCrawlerUrl_descriptor_->enum_type(0);
+  QCrawlerUrl_LinkType_descriptor_ = QCrawlerUrl_descriptor_->enum_type(1);
+  QCrawlerUrl_UrlStatus_descriptor_ = QCrawlerUrl_descriptor_->enum_type(2);
   QCrawlerRecord_descriptor_ = file->message_type(2);
-  static const int QCrawlerRecord_offsets_[8] = {
+  static const int QCrawlerRecord_offsets_[11] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, crawl_url_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, raw_html_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, raw_title_),
@@ -78,6 +85,9 @@ void protobuf_AssignDesc_qcrawler_5frecord_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, raw_sub_links_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, title_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, content_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, focused_links_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, download_time_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, last_modified_),
   };
   QCrawlerRecord_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -129,18 +139,30 @@ void protobuf_AddDesc_qcrawler_5frecord_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\025qcrawler_record.proto\"\021\n\017QCrawlerUrlMe"
-    "ta\"\354\001\n\013QCrawlerUrl\022\013\n\003url\030\001 \002(\t\022\026\n\016normo"
-    "lized_url\030\007 \001(\t\022\017\n\007url_md5\030\002 \001(\t\022\016\n\006anch"
-    "or\030\003 \001(\t\022\023\n\013crawl_level\030\004 \002(\005\022;\n\ncrawl_t"
-    "ype\030\005 \001(\0162\026.QCrawlerUrl.CrawlType:\017HOST_"
-    "RESTRICTED\022#\n\tmate_data\030\006 \001(\0132\020.QCrawler"
-    "UrlMeta\" \n\tCrawlType\022\023\n\017HOST_RESTRICTED\020"
-    "\000\"\311\001\n\016QCrawlerRecord\022\037\n\tcrawl_url\030\001 \002(\0132"
-    "\014.QCrawlerUrl\022\020\n\010raw_html\030\010 \001(\t\022\021\n\traw_t"
-    "itle\030\002 \001(\t\022\023\n\013raw_content\030\003 \001(\t\022\027\n\017raw_c"
-    "ontent_md5\030\004 \001(\t\022#\n\rraw_sub_links\030\005 \003(\0132"
-    "\014.QCrawlerUrl\022\r\n\005title\030\006 \001(\t\022\017\n\007content\030"
-    "\007 \001(\t", 485);
+    "ta\"\200\005\n\013QCrawlerUrl\022\013\n\003url\030\001 \002(\t\0227\n\nurl_s"
+    "tatus\030\n \001(\0162\026.QCrawlerUrl.UrlStatus:\013NOT"
+    "_CRAWLED\022\014\n\004host\030\002 \001(\t\022\017\n\007url_md5\030\003 \001(\t\022"
+    "\023\n\013anchor_text\030\004 \001(\t\022\024\n\014failed_times\030\005 \001"
+    "(\005\022\023\n\013crawl_level\030\006 \002(\005\022;\n\ncrawl_type\030\007 "
+    "\001(\0162\026.QCrawlerUrl.CrawlType:\017HOST_RESTRI"
+    "CTED\022#\n\tmate_data\030\010 \001(\0132\020.QCrawlerUrlMet"
+    "a\022(\n\tlink_type\030\t \001(\0162\025.QCrawlerUrl.LinkT"
+    "ype\",\n\tCrawlType\022\023\n\017HOST_RESTRICTED\020\000\022\n\n"
+    "\006UPDATE\020\001\"&\n\010LinkType\022\010\n\004HTML\020\000\022\007\n\003IMG\020\001"
+    "\022\007\n\003PDF\020\002\"\351\001\n\tUrlStatus\022\026\n\tNOT_EXIST\020\234\377\377"
+    "\377\377\377\377\377\377\001\022\017\n\013NOT_CRAWLED\020\000\022\016\n\nCRAWLED_OK\020\001"
+    "\022\022\n\016NOT_NEED_CRAWL\020\n\022\033\n\016FAILED_CRAWL_1\020\377"
+    "\377\377\377\377\377\377\377\377\001\022\033\n\016FAILED_CRAWL_2\020\376\377\377\377\377\377\377\377\377\001\022\033"
+    "\n\016FAILED_CRAWL_3\020\375\377\377\377\377\377\377\377\377\001\022\033\n\016FAILED_CR"
+    "AWL_4\020\374\377\377\377\377\377\377\377\377\001\022\033\n\016FAILED_CRAWL_5\020\373\377\377\377\377"
+    "\377\377\377\377\001\"\234\002\n\016QCrawlerRecord\022\037\n\tcrawl_url\030\001 "
+    "\002(\0132\014.QCrawlerUrl\022\020\n\010raw_html\030\010 \001(\t\022\021\n\tr"
+    "aw_title\030\002 \001(\t\022\023\n\013raw_content\030\003 \001(\t\022\027\n\017r"
+    "aw_content_md5\030\004 \001(\t\022#\n\rraw_sub_links\030\005 "
+    "\003(\0132\014.QCrawlerUrl\022\r\n\005title\030\006 \001(\t\022\017\n\007cont"
+    "ent\030\007 \001(\t\022#\n\rfocused_links\030\t \003(\0132\014.QCraw"
+    "lerUrl\022\025\n\rdownload_time\030\n \001(\005\022\025\n\rlast_mo"
+    "dified\030\013 \001(\005", 972);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "qcrawler_record.proto", &protobuf_RegisterTypes);
   QCrawlerUrlMeta::default_instance_ = new QCrawlerUrlMeta();
@@ -324,6 +346,7 @@ const ::google::protobuf::EnumDescriptor* QCrawlerUrl_CrawlType_descriptor() {
 bool QCrawlerUrl_CrawlType_IsValid(int value) {
   switch(value) {
     case 0:
+    case 1:
       return true;
     default:
       return false;
@@ -332,22 +355,84 @@ bool QCrawlerUrl_CrawlType_IsValid(int value) {
 
 #ifndef _MSC_VER
 const QCrawlerUrl_CrawlType QCrawlerUrl::HOST_RESTRICTED;
+const QCrawlerUrl_CrawlType QCrawlerUrl::UPDATE;
 const QCrawlerUrl_CrawlType QCrawlerUrl::CrawlType_MIN;
 const QCrawlerUrl_CrawlType QCrawlerUrl::CrawlType_MAX;
 const int QCrawlerUrl::CrawlType_ARRAYSIZE;
 #endif  // _MSC_VER
+const ::google::protobuf::EnumDescriptor* QCrawlerUrl_LinkType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return QCrawlerUrl_LinkType_descriptor_;
+}
+bool QCrawlerUrl_LinkType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const QCrawlerUrl_LinkType QCrawlerUrl::HTML;
+const QCrawlerUrl_LinkType QCrawlerUrl::IMG;
+const QCrawlerUrl_LinkType QCrawlerUrl::PDF;
+const QCrawlerUrl_LinkType QCrawlerUrl::LinkType_MIN;
+const QCrawlerUrl_LinkType QCrawlerUrl::LinkType_MAX;
+const int QCrawlerUrl::LinkType_ARRAYSIZE;
+#endif  // _MSC_VER
+const ::google::protobuf::EnumDescriptor* QCrawlerUrl_UrlStatus_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return QCrawlerUrl_UrlStatus_descriptor_;
+}
+bool QCrawlerUrl_UrlStatus_IsValid(int value) {
+  switch(value) {
+    case -100:
+    case -5:
+    case -4:
+    case -3:
+    case -2:
+    case -1:
+    case 0:
+    case 1:
+    case 10:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const QCrawlerUrl_UrlStatus QCrawlerUrl::NOT_EXIST;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::NOT_CRAWLED;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::CRAWLED_OK;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::NOT_NEED_CRAWL;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::FAILED_CRAWL_1;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::FAILED_CRAWL_2;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::FAILED_CRAWL_3;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::FAILED_CRAWL_4;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::FAILED_CRAWL_5;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::UrlStatus_MIN;
+const QCrawlerUrl_UrlStatus QCrawlerUrl::UrlStatus_MAX;
+const int QCrawlerUrl::UrlStatus_ARRAYSIZE;
+#endif  // _MSC_VER
 const ::std::string QCrawlerUrl::_default_url_;
-const ::std::string QCrawlerUrl::_default_normolized_url_;
+const ::std::string QCrawlerUrl::_default_host_;
 const ::std::string QCrawlerUrl::_default_url_md5_;
-const ::std::string QCrawlerUrl::_default_anchor_;
+const ::std::string QCrawlerUrl::_default_anchor_text_;
 #ifndef _MSC_VER
 const int QCrawlerUrl::kUrlFieldNumber;
-const int QCrawlerUrl::kNormolizedUrlFieldNumber;
+const int QCrawlerUrl::kUrlStatusFieldNumber;
+const int QCrawlerUrl::kHostFieldNumber;
 const int QCrawlerUrl::kUrlMd5FieldNumber;
-const int QCrawlerUrl::kAnchorFieldNumber;
+const int QCrawlerUrl::kAnchorTextFieldNumber;
+const int QCrawlerUrl::kFailedTimesFieldNumber;
 const int QCrawlerUrl::kCrawlLevelFieldNumber;
 const int QCrawlerUrl::kCrawlTypeFieldNumber;
 const int QCrawlerUrl::kMateDataFieldNumber;
+const int QCrawlerUrl::kLinkTypeFieldNumber;
 #endif  // !_MSC_VER
 
 QCrawlerUrl::QCrawlerUrl()
@@ -368,12 +453,15 @@ QCrawlerUrl::QCrawlerUrl(const QCrawlerUrl& from)
 void QCrawlerUrl::SharedCtor() {
   _cached_size_ = 0;
   url_ = const_cast< ::std::string*>(&_default_url_);
-  normolized_url_ = const_cast< ::std::string*>(&_default_normolized_url_);
+  url_status_ = 0;
+  host_ = const_cast< ::std::string*>(&_default_host_);
   url_md5_ = const_cast< ::std::string*>(&_default_url_md5_);
-  anchor_ = const_cast< ::std::string*>(&_default_anchor_);
+  anchor_text_ = const_cast< ::std::string*>(&_default_anchor_text_);
+  failed_times_ = 0;
   crawl_level_ = 0;
   crawl_type_ = 0;
   mate_data_ = NULL;
+  link_type_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -385,14 +473,14 @@ void QCrawlerUrl::SharedDtor() {
   if (url_ != &_default_url_) {
     delete url_;
   }
-  if (normolized_url_ != &_default_normolized_url_) {
-    delete normolized_url_;
+  if (host_ != &_default_host_) {
+    delete host_;
   }
   if (url_md5_ != &_default_url_md5_) {
     delete url_md5_;
   }
-  if (anchor_ != &_default_anchor_) {
-    delete anchor_;
+  if (anchor_text_ != &_default_anchor_text_) {
+    delete anchor_text_;
   }
   if (this != default_instance_) {
     delete mate_data_;
@@ -426,26 +514,31 @@ void QCrawlerUrl::Clear() {
         url_->clear();
       }
     }
-    if (_has_bit(1)) {
-      if (normolized_url_ != &_default_normolized_url_) {
-        normolized_url_->clear();
+    url_status_ = 0;
+    if (_has_bit(2)) {
+      if (host_ != &_default_host_) {
+        host_->clear();
       }
     }
-    if (_has_bit(2)) {
+    if (_has_bit(3)) {
       if (url_md5_ != &_default_url_md5_) {
         url_md5_->clear();
       }
     }
-    if (_has_bit(3)) {
-      if (anchor_ != &_default_anchor_) {
-        anchor_->clear();
+    if (_has_bit(4)) {
+      if (anchor_text_ != &_default_anchor_text_) {
+        anchor_text_->clear();
       }
     }
+    failed_times_ = 0;
     crawl_level_ = 0;
     crawl_type_ = 0;
-    if (_has_bit(6)) {
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (_has_bit(8)) {
       if (mate_data_ != NULL) mate_data_->::QCrawlerUrlMeta::Clear();
     }
+    link_type_ = 0;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -469,12 +562,29 @@ bool QCrawlerUrl::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(18)) goto parse_url_md5;
+        if (input->ExpectTag(18)) goto parse_host;
         break;
       }
       
-      // optional string url_md5 = 2;
+      // optional string host = 2;
       case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_host:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_host()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->host().data(), this->host().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_url_md5;
+        break;
+      }
+      
+      // optional string url_md5 = 3;
+      case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_url_md5:
@@ -486,45 +596,61 @@ bool QCrawlerUrl::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(26)) goto parse_anchor;
+        if (input->ExpectTag(34)) goto parse_anchor_text;
         break;
       }
       
-      // optional string anchor = 3;
-      case 3: {
+      // optional string anchor_text = 4;
+      case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_anchor:
+         parse_anchor_text:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_anchor()));
+                input, this->mutable_anchor_text()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->anchor().data(), this->anchor().length(),
+            this->anchor_text().data(), this->anchor_text().length(),
             ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(32)) goto parse_crawl_level;
+        if (input->ExpectTag(40)) goto parse_failed_times;
         break;
       }
       
-      // required int32 crawl_level = 4;
-      case 4: {
+      // optional int32 failed_times = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_failed_times:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &failed_times_)));
+          _set_bit(5);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(48)) goto parse_crawl_level;
+        break;
+      }
+      
+      // required int32 crawl_level = 6;
+      case 6: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_crawl_level:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &crawl_level_)));
-          _set_bit(4);
+          _set_bit(6);
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(40)) goto parse_crawl_type;
+        if (input->ExpectTag(56)) goto parse_crawl_type;
         break;
       }
       
-      // optional .QCrawlerUrl.CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
-      case 5: {
+      // optional .QCrawlerUrl.CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
+      case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_crawl_type:
@@ -535,17 +661,17 @@ bool QCrawlerUrl::MergePartialFromCodedStream(
           if (::QCrawlerUrl_CrawlType_IsValid(value)) {
             set_crawl_type(static_cast< ::QCrawlerUrl_CrawlType >(value));
           } else {
-            mutable_unknown_fields()->AddVarint(5, value);
+            mutable_unknown_fields()->AddVarint(7, value);
           }
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(50)) goto parse_mate_data;
+        if (input->ExpectTag(66)) goto parse_mate_data;
         break;
       }
       
-      // optional .QCrawlerUrlMeta mate_data = 6;
-      case 6: {
+      // optional .QCrawlerUrlMeta mate_data = 8;
+      case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
          parse_mate_data:
@@ -554,20 +680,45 @@ bool QCrawlerUrl::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(58)) goto parse_normolized_url;
+        if (input->ExpectTag(72)) goto parse_link_type;
         break;
       }
       
-      // optional string normolized_url = 7;
-      case 7: {
+      // optional .QCrawlerUrl.LinkType link_type = 9;
+      case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
-         parse_normolized_url:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_normolized_url()));
-          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-            this->normolized_url().data(), this->normolized_url().length(),
-            ::google::protobuf::internal::WireFormat::PARSE);
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_link_type:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::QCrawlerUrl_LinkType_IsValid(value)) {
+            set_link_type(static_cast< ::QCrawlerUrl_LinkType >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(9, value);
+          }
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(80)) goto parse_url_status;
+        break;
+      }
+      
+      // optional .QCrawlerUrl.UrlStatus url_status = 10 [default = NOT_CRAWLED];
+      case 10: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_url_status:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::QCrawlerUrl_UrlStatus_IsValid(value)) {
+            set_url_status(static_cast< ::QCrawlerUrl_UrlStatus >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(10, value);
+          }
         } else {
           goto handle_uninterpreted;
         }
@@ -602,48 +753,65 @@ void QCrawlerUrl::SerializeWithCachedSizes(
       1, this->url(), output);
   }
   
-  // optional string url_md5 = 2;
+  // optional string host = 2;
   if (_has_bit(2)) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->host().data(), this->host().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      2, this->host(), output);
+  }
+  
+  // optional string url_md5 = 3;
+  if (_has_bit(3)) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->url_md5().data(), this->url_md5().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      2, this->url_md5(), output);
+      3, this->url_md5(), output);
   }
   
-  // optional string anchor = 3;
-  if (_has_bit(3)) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->anchor().data(), this->anchor().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    ::google::protobuf::internal::WireFormatLite::WriteString(
-      3, this->anchor(), output);
-  }
-  
-  // required int32 crawl_level = 4;
+  // optional string anchor_text = 4;
   if (_has_bit(4)) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->crawl_level(), output);
-  }
-  
-  // optional .QCrawlerUrl.CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
-  if (_has_bit(5)) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      5, this->crawl_type(), output);
-  }
-  
-  // optional .QCrawlerUrlMeta mate_data = 6;
-  if (_has_bit(6)) {
-    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      6, this->mate_data(), output);
-  }
-  
-  // optional string normolized_url = 7;
-  if (_has_bit(1)) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->normolized_url().data(), this->normolized_url().length(),
+      this->anchor_text().data(), this->anchor_text().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     ::google::protobuf::internal::WireFormatLite::WriteString(
-      7, this->normolized_url(), output);
+      4, this->anchor_text(), output);
+  }
+  
+  // optional int32 failed_times = 5;
+  if (_has_bit(5)) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->failed_times(), output);
+  }
+  
+  // required int32 crawl_level = 6;
+  if (_has_bit(6)) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->crawl_level(), output);
+  }
+  
+  // optional .QCrawlerUrl.CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
+  if (_has_bit(7)) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      7, this->crawl_type(), output);
+  }
+  
+  // optional .QCrawlerUrlMeta mate_data = 8;
+  if (_has_bit(8)) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      8, this->mate_data(), output);
+  }
+  
+  // optional .QCrawlerUrl.LinkType link_type = 9;
+  if (_has_bit(9)) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      9, this->link_type(), output);
+  }
+  
+  // optional .QCrawlerUrl.UrlStatus url_status = 10 [default = NOT_CRAWLED];
+  if (_has_bit(1)) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      10, this->url_status(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -664,52 +832,69 @@ void QCrawlerUrl::SerializeWithCachedSizes(
         1, this->url(), target);
   }
   
-  // optional string url_md5 = 2;
+  // optional string host = 2;
   if (_has_bit(2)) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->host().data(), this->host().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->host(), target);
+  }
+  
+  // optional string url_md5 = 3;
+  if (_has_bit(3)) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->url_md5().data(), this->url_md5().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        2, this->url_md5(), target);
+        3, this->url_md5(), target);
   }
   
-  // optional string anchor = 3;
-  if (_has_bit(3)) {
+  // optional string anchor_text = 4;
+  if (_has_bit(4)) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->anchor().data(), this->anchor().length(),
+      this->anchor_text().data(), this->anchor_text().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE);
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->anchor(), target);
+        4, this->anchor_text(), target);
   }
   
-  // required int32 crawl_level = 4;
-  if (_has_bit(4)) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->crawl_level(), target);
-  }
-  
-  // optional .QCrawlerUrl.CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
+  // optional int32 failed_times = 5;
   if (_has_bit(5)) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      5, this->crawl_type(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->failed_times(), target);
   }
   
-  // optional .QCrawlerUrlMeta mate_data = 6;
+  // required int32 crawl_level = 6;
   if (_has_bit(6)) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->crawl_level(), target);
+  }
+  
+  // optional .QCrawlerUrl.CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
+  if (_has_bit(7)) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      7, this->crawl_type(), target);
+  }
+  
+  // optional .QCrawlerUrlMeta mate_data = 8;
+  if (_has_bit(8)) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        6, this->mate_data(), target);
+        8, this->mate_data(), target);
   }
   
-  // optional string normolized_url = 7;
+  // optional .QCrawlerUrl.LinkType link_type = 9;
+  if (_has_bit(9)) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      9, this->link_type(), target);
+  }
+  
+  // optional .QCrawlerUrl.UrlStatus url_status = 10 [default = NOT_CRAWLED];
   if (_has_bit(1)) {
-    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
-      this->normolized_url().data(), this->normolized_url().length(),
-      ::google::protobuf::internal::WireFormat::SERIALIZE);
-    target =
-      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        7, this->normolized_url(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      10, this->url_status(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -730,45 +915,66 @@ int QCrawlerUrl::ByteSize() const {
           this->url());
     }
     
-    // optional string normolized_url = 7;
-    if (has_normolized_url()) {
+    // optional .QCrawlerUrl.UrlStatus url_status = 10 [default = NOT_CRAWLED];
+    if (has_url_status()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->normolized_url());
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->url_status());
     }
     
-    // optional string url_md5 = 2;
+    // optional string host = 2;
+    if (has_host()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->host());
+    }
+    
+    // optional string url_md5 = 3;
     if (has_url_md5()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->url_md5());
     }
     
-    // optional string anchor = 3;
-    if (has_anchor()) {
+    // optional string anchor_text = 4;
+    if (has_anchor_text()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->anchor());
+          this->anchor_text());
     }
     
-    // required int32 crawl_level = 4;
+    // optional int32 failed_times = 5;
+    if (has_failed_times()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->failed_times());
+    }
+    
+    // required int32 crawl_level = 6;
     if (has_crawl_level()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->crawl_level());
     }
     
-    // optional .QCrawlerUrl.CrawlType crawl_type = 5 [default = HOST_RESTRICTED];
+    // optional .QCrawlerUrl.CrawlType crawl_type = 7 [default = HOST_RESTRICTED];
     if (has_crawl_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->crawl_type());
     }
     
-    // optional .QCrawlerUrlMeta mate_data = 6;
+  }
+  if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    // optional .QCrawlerUrlMeta mate_data = 8;
     if (has_mate_data()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
           this->mate_data());
+    }
+    
+    // optional .QCrawlerUrl.LinkType link_type = 9;
+    if (has_link_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->link_type());
     }
     
   }
@@ -802,22 +1008,33 @@ void QCrawlerUrl::MergeFrom(const QCrawlerUrl& from) {
       set_url(from.url());
     }
     if (from._has_bit(1)) {
-      set_normolized_url(from.normolized_url());
+      set_url_status(from.url_status());
     }
     if (from._has_bit(2)) {
-      set_url_md5(from.url_md5());
+      set_host(from.host());
     }
     if (from._has_bit(3)) {
-      set_anchor(from.anchor());
+      set_url_md5(from.url_md5());
     }
     if (from._has_bit(4)) {
-      set_crawl_level(from.crawl_level());
+      set_anchor_text(from.anchor_text());
     }
     if (from._has_bit(5)) {
-      set_crawl_type(from.crawl_type());
+      set_failed_times(from.failed_times());
     }
     if (from._has_bit(6)) {
+      set_crawl_level(from.crawl_level());
+    }
+    if (from._has_bit(7)) {
+      set_crawl_type(from.crawl_type());
+    }
+  }
+  if (from._has_bits_[8 / 32] & (0xffu << (8 % 32))) {
+    if (from._has_bit(8)) {
       mutable_mate_data()->::QCrawlerUrlMeta::MergeFrom(from.mate_data());
+    }
+    if (from._has_bit(9)) {
+      set_link_type(from.link_type());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -836,7 +1053,7 @@ void QCrawlerUrl::CopyFrom(const QCrawlerUrl& from) {
 }
 
 bool QCrawlerUrl::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000011) != 0x00000011) return false;
+  if ((_has_bits_[0] & 0x00000041) != 0x00000041) return false;
   
   return true;
 }
@@ -844,12 +1061,15 @@ bool QCrawlerUrl::IsInitialized() const {
 void QCrawlerUrl::Swap(QCrawlerUrl* other) {
   if (other != this) {
     std::swap(url_, other->url_);
-    std::swap(normolized_url_, other->normolized_url_);
+    std::swap(url_status_, other->url_status_);
+    std::swap(host_, other->host_);
     std::swap(url_md5_, other->url_md5_);
-    std::swap(anchor_, other->anchor_);
+    std::swap(anchor_text_, other->anchor_text_);
+    std::swap(failed_times_, other->failed_times_);
     std::swap(crawl_level_, other->crawl_level_);
     std::swap(crawl_type_, other->crawl_type_);
     std::swap(mate_data_, other->mate_data_);
+    std::swap(link_type_, other->link_type_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -882,6 +1102,9 @@ const int QCrawlerRecord::kRawContentMd5FieldNumber;
 const int QCrawlerRecord::kRawSubLinksFieldNumber;
 const int QCrawlerRecord::kTitleFieldNumber;
 const int QCrawlerRecord::kContentFieldNumber;
+const int QCrawlerRecord::kFocusedLinksFieldNumber;
+const int QCrawlerRecord::kDownloadTimeFieldNumber;
+const int QCrawlerRecord::kLastModifiedFieldNumber;
 #endif  // !_MSC_VER
 
 QCrawlerRecord::QCrawlerRecord()
@@ -908,6 +1131,8 @@ void QCrawlerRecord::SharedCtor() {
   raw_content_md5_ = const_cast< ::std::string*>(&_default_raw_content_md5_);
   title_ = const_cast< ::std::string*>(&_default_title_);
   content_ = const_cast< ::std::string*>(&_default_content_);
+  download_time_ = 0;
+  last_modified_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -995,7 +1220,12 @@ void QCrawlerRecord::Clear() {
       }
     }
   }
+  if (_has_bits_[9 / 32] & (0xffu << (9 % 32))) {
+    download_time_ = 0;
+    last_modified_ = 0;
+  }
   raw_sub_links_.Clear();
+  focused_links_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1132,6 +1362,53 @@ bool QCrawlerRecord::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(74)) goto parse_focused_links;
+        break;
+      }
+      
+      // repeated .QCrawlerUrl focused_links = 9;
+      case 9: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_focused_links:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+                input, add_focused_links()));
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(74)) goto parse_focused_links;
+        if (input->ExpectTag(80)) goto parse_download_time;
+        break;
+      }
+      
+      // optional int32 download_time = 10;
+      case 10: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_download_time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &download_time_)));
+          _set_bit(9);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(88)) goto parse_last_modified;
+        break;
+      }
+      
+      // optional int32 last_modified = 11;
+      case 11: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_last_modified:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &last_modified_)));
+          _set_bit(10);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -1220,6 +1497,22 @@ void QCrawlerRecord::SerializeWithCachedSizes(
       8, this->raw_html(), output);
   }
   
+  // repeated .QCrawlerUrl focused_links = 9;
+  for (int i = 0; i < this->focused_links_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      9, this->focused_links(i), output);
+  }
+  
+  // optional int32 download_time = 10;
+  if (_has_bit(9)) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->download_time(), output);
+  }
+  
+  // optional int32 last_modified = 11;
+  if (_has_bit(10)) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->last_modified(), output);
+  }
+  
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1302,6 +1595,23 @@ void QCrawlerRecord::SerializeWithCachedSizes(
         8, this->raw_html(), target);
   }
   
+  // repeated .QCrawlerUrl focused_links = 9;
+  for (int i = 0; i < this->focused_links_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        9, this->focused_links(i), target);
+  }
+  
+  // optional int32 download_time = 10;
+  if (_has_bit(9)) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->download_time(), target);
+  }
+  
+  // optional int32 last_modified = 11;
+  if (_has_bit(10)) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->last_modified(), target);
+  }
+  
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -1363,12 +1673,36 @@ int QCrawlerRecord::ByteSize() const {
     }
     
   }
+  if (_has_bits_[9 / 32] & (0xffu << (9 % 32))) {
+    // optional int32 download_time = 10;
+    if (has_download_time()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->download_time());
+    }
+    
+    // optional int32 last_modified = 11;
+    if (has_last_modified()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->last_modified());
+    }
+    
+  }
   // repeated .QCrawlerUrl raw_sub_links = 5;
   total_size += 1 * this->raw_sub_links_size();
   for (int i = 0; i < this->raw_sub_links_size(); i++) {
     total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
         this->raw_sub_links(i));
+  }
+  
+  // repeated .QCrawlerUrl focused_links = 9;
+  total_size += 1 * this->focused_links_size();
+  for (int i = 0; i < this->focused_links_size(); i++) {
+    total_size +=
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        this->focused_links(i));
   }
   
   if (!unknown_fields().empty()) {
@@ -1397,6 +1731,7 @@ void QCrawlerRecord::MergeFrom(const ::google::protobuf::Message& from) {
 void QCrawlerRecord::MergeFrom(const QCrawlerRecord& from) {
   GOOGLE_CHECK_NE(&from, this);
   raw_sub_links_.MergeFrom(from.raw_sub_links_);
+  focused_links_.MergeFrom(from.focused_links_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from._has_bit(0)) {
       mutable_crawl_url()->::QCrawlerUrl::MergeFrom(from.crawl_url());
@@ -1418,6 +1753,14 @@ void QCrawlerRecord::MergeFrom(const QCrawlerRecord& from) {
     }
     if (from._has_bit(7)) {
       set_content(from.content());
+    }
+  }
+  if (from._has_bits_[9 / 32] & (0xffu << (9 % 32))) {
+    if (from._has_bit(9)) {
+      set_download_time(from.download_time());
+    }
+    if (from._has_bit(10)) {
+      set_last_modified(from.last_modified());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -1444,6 +1787,9 @@ bool QCrawlerRecord::IsInitialized() const {
   for (int i = 0; i < raw_sub_links_size(); i++) {
     if (!this->raw_sub_links(i).IsInitialized()) return false;
   }
+  for (int i = 0; i < focused_links_size(); i++) {
+    if (!this->focused_links(i).IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -1457,6 +1803,9 @@ void QCrawlerRecord::Swap(QCrawlerRecord* other) {
     raw_sub_links_.Swap(&other->raw_sub_links_);
     std::swap(title_, other->title_);
     std::swap(content_, other->content_);
+    focused_links_.Swap(&other->focused_links_);
+    std::swap(download_time_, other->download_time_);
+    std::swap(last_modified_, other->last_modified_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

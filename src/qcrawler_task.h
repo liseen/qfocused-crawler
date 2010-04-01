@@ -6,14 +6,18 @@
 #include <QDebug>
 
 #include "qcrawler_common.h"
+#include "qcrawler_util.h"
+#include "qcrawler_db.h"
 
 class QCrawlerTask : public QObject
 {
     Q_OBJECT
 
 public:
-    QCrawlerTask() {
+    QCrawlerTask(QCrawlerDB* qc_db) {
         // TODO config
+
+        qcrawler_db = qc_db;
     }
 
 public slots:
@@ -23,7 +27,7 @@ signals:
     void urlGetFinished(bool, QCrawlerRecord &rec);
 
 private:
-    QUrl url;
+    QCrawlerDB *qcrawler_db;
 };
 
 #endif
