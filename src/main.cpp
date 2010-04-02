@@ -2,7 +2,7 @@
 #include <QUrl>
 #include <QDebug>
 
-#include "qcrawler_config.h"
+#include "qcrawler_common.h"
 #include "qcrawler.h"
 
 // Get url from queue
@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
 
 
     std::string conf_file = "etc/qcrawler.conf";
+
+    GLOBAL_INIT_LOGGER("log/qcrawler.log");
 
     QCrawler* crawler = new QCrawler(conf_file);
 

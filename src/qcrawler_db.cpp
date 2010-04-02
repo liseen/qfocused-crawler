@@ -41,8 +41,9 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     return true;
 }
 
-QCrawlerUrl::UrlStatus QCrawlerDB::getUrlStatus(std::string url) {
-    QCrawlerUrl::UrlStatus url_status = QCrawlerUrl::NOT_EXIST;
+bool QCrawlerDB::getUrlStatus(std::string url, QCrawlerUrl::UrlStatus *url_status) {
+    bool ret = false;
+
     int status = 0;
 
     char *value;
@@ -50,29 +51,34 @@ QCrawlerUrl::UrlStatus QCrawlerDB::getUrlStatus(std::string url) {
     if(value){
         status = atoi(value);
         if (QCrawlerUrl_UrlStatus_IsValid(status)) {
-            return (QCrawlerUrl::UrlStatus)status;
+            *url_status = (QCrawlerUrl::UrlStatus)status;
+            ret = true;
         }
 
         free(value);
     } else {
         int ecode = tcrdbecode(url_hash_db);
         if (ecode == 7) {
-            return QCrawlerUrl::NOT_EXIST;
+            *url_status = QCrawlerUrl::NOT_EXIST;
+            ret = true;
         } else {
-            fprintf(stderr, "get error: %d : %s\n", ecode, tcrdberrmsg(ecode));
+            log_error(logger, "get error: " << tcrdberrmsg(ecode));
+            ret = false;
         }
     }
 
-    return url_status;
+    return ret;
 }
 
-bool QCrawlerDB::updateUrlStatus(std::string url, int status) {
+bool QCrawlerDB::updateUrlStatus(const std::string &url, int status) {
+    log_debug(logger, "update status: " << status << " url: " <<  url);
+
     char status_str[40];
     sprintf(status_str, "%d", status);
 
     if(!tcrdbput2(url_hash_db, url.c_str(), status_str)) {
         int ecode = tcrdbecode(url_hash_db);
-        fprintf(stderr, "put error: %s\n", tcrdberrmsg(ecode));
+        log_debug(logger, "update url status put error: " << tcrdberrmsg(ecode));
         return false;
     }
 

@@ -13,7 +13,11 @@ QCrawlerConfig* QCrawlerConfig::getInstance() {
 
 bool QCrawlerConfig::init(const std::string &conf_file) {
     settings = new QSettings(QString::fromUtf8(conf_file.c_str()), QSettings::IniFormat);
-    return true;
+    if (QSettings::NoError == settings->status()) {
+        return true;
+    }
+
+    return false;
 }
 
 std::string QCrawlerConfig::url_hash_db_host() {
@@ -21,7 +25,7 @@ std::string QCrawlerConfig::url_hash_db_host() {
 }
 
 int QCrawlerConfig::url_hash_db_port() {
-    return 1978;
+    return 1979;
 }
 
 

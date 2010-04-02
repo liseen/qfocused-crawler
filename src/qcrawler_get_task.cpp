@@ -12,10 +12,10 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
     QCrawlerUrl* crawl_url = rec.mutable_crawl_url();
     if (first_time) {
         first_time = false;
-        //std::string url = "http://travel.sina.com.cn/";
-        std::string url = "http://travel.sina.com.cn/china/2008-08-07/174113097.shtml";
+        std::string url = "http://travel.sina.com.cn/";
+        //std::string url = "http://travel.sina.com.cn/china/2008-08-07/174113097.shtml";
         std::string host = "travel.sina.com.cn";
-        QCrawlerUrl::CrawlType crawl_type = QCrawlerUrl::UPDATE;
+        QCrawlerUrl::CrawlType crawl_type = QCrawlerUrl::HOST_RESTRICTED;
         int level = 0;
 
         crawl_url->set_url(url);
@@ -33,11 +33,17 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
     }
 
 
-    qDebug() << "get url: " << QString::fromUtf8(crawl_url->url().c_str());
-    QCrawlerUrl::UrlStatus url_status = crawler_db->getUrlStatus(crawl_url->url());
+
+    QCrawlerUrl::UrlStatus url_status;
+    bool get_ok = crawler_db->getUrlStatus(crawl_url->url(), &url_status);
+
+    log_info(logger, "get url: " << crawl_url->url());
+    log_debug(logger, "get above url status " << url_status);
 
     bool valid = true;
-    if (url_status == QCrawlerUrl::NOT_EXIST) {
+    if (!get_ok) {
+        valid = false;
+    } else if (url_status == QCrawlerUrl::NOT_EXIST) {
         crawler_db->updateUrlStatus(crawl_url->url(), QCrawlerUrl::NOT_CRAWLED);
         valid = true;
     } else if (url_status > 0 && crawl_url->crawl_type() != QCrawlerUrl::UPDATE) { //
@@ -48,5 +54,6 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
 
     }
 
+    log_debug(logger, "process status " << valid);
     emit processFinished(valid, rec);
 }

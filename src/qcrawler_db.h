@@ -19,6 +19,7 @@ class QCrawlerDB : public QObject
 
 public:
     QCrawlerDB() {
+        logger = get_qcrawler_logger("qcrawler_db");
         QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
 
         url_hash_db_host = crawler_config->url_hash_db_host();
@@ -31,13 +32,13 @@ public:
         record_db = tcrdbnew();
         if(!tcrdbopen(record_db, record_db_host.c_str(), record_db_port)){
             int ecode = tcrdbecode(record_db);
-            fprintf(stderr, "open error: %s\n", tcrdberrmsg(ecode));
+            log_fatal(logger, "open record db error: " << tcrdberrmsg(ecode));
         }
 
         url_hash_db = tcrdbnew();
         if(!tcrdbopen(url_hash_db, url_hash_db_host.c_str(), url_hash_db_port)){
             int ecode = tcrdbecode(url_hash_db);
-            fprintf(stderr, "open error: %s\n", tcrdberrmsg(ecode));
+            log_fatal(logger, "open url hash db error: " << tcrdberrmsg(ecode));
         }
     }
 
@@ -45,17 +46,19 @@ public:
         /* close the connection */
         if(!tcrdbclose(record_db)){
             int ecode = tcrdbecode(record_db);
-            fprintf(stderr, "close error: %s\n", tcrdberrmsg(ecode));
+            log_error(logger, "close record db error: " << tcrdberrmsg(ecode));
         }
 
         tcrdbdel(record_db);
     }
 
     bool storeRecord(const QCrawlerRecord &rec);
-    QCrawlerUrl::UrlStatus getUrlStatus(std::string url);
-    bool updateUrlStatus(std::string url, int);
+    bool getUrlStatus(std::string url, QCrawlerUrl::UrlStatus *url_status);
+    bool updateUrlStatus(const std::string &url, int);
 
 private:
+    QCrawlerLogger logger;
+
     TCRDB *record_db;
     std::string record_db_type;
     std::string record_db_host;

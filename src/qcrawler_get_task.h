@@ -17,6 +17,7 @@ class QCrawlerGetTask : public QCrawlerProcessor
 
 public:
     QCrawlerGetTask(QCrawlerDB * db, QCrawlerUrlQueue *queue) : QCrawlerProcessor(db, queue) {
+        logger = get_qcrawler_logger("get_task");
         //QCralwerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
 
@@ -24,6 +25,9 @@ public:
 
 public slots:
     virtual void process(bool r, QCrawlerRecord &rec);
+
+private:
+    QCrawlerLogger logger;
 };
 
 #endif

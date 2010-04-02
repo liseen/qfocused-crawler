@@ -17,6 +17,7 @@ class QCrawlerFocusFilter : public QCrawlerProcessor
 
 public:
     QCrawlerFocusFilter(QCrawlerDB * db, QCrawlerUrlQueue *queue) :QCrawlerProcessor(db, queue) {
+        logger = get_qcrawler_logger("focus_filter");
         //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
 
@@ -34,6 +35,8 @@ public:
 public slots:
     virtual void process(bool r, QCrawlerRecord &rec);
 
+private:
+    QCrawlerLogger logger;
 };
 
 #endif

@@ -18,10 +18,11 @@ void QCrawlerFocusFilter::process(bool r, QCrawlerRecord &rec) {
         crawler_db->updateUrlStatus(url, url_status);
         // wo don't need check sub url here?
         emit processFinished(false, rec);
-        return;
     }
 
-    urlFilter(rec);
+    if (urlFilter(rec)) {
+
+    }
 
     insertFocusedUrls(rec);
 }
@@ -35,27 +36,40 @@ bool QCrawlerFocusFilter::contentFilter(QCrawlerRecord &rec) {
 
 
 bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
-    // search url in hash database
-    // move sub links to
+    log_debug(logger, "go into url filter");
+    QCrawlerUrl::CrawlType crawl_type = rec.crawl_url().crawl_type();
+    std::string host = rec.crawl_url().host();
     int size =rec.raw_sub_links_size();
     for (int i = 0; i < size; i++) {
-        std::string url = rec.raw_sub_links(i).url();
-        std::string host = rec.raw_sub_links(i).host();
-        int crawl_level = rec.raw_sub_links(i).crawl_level();
+        std::string sub_url = rec.raw_sub_links(i).url();
+        std::string sub_host = rec.raw_sub_links(i).host();
+        int sub_crawl_level = rec.raw_sub_links(i).crawl_level();
 
         // TODO some url filter alogrithm
-        QCrawlerUrl::UrlStatus url_status = crawler_db->getUrlStatus(url);
+        QCrawlerUrl::UrlStatus url_status;
+        if (crawler_db->getUrlStatus(sub_url, &url_status)) {
+            if (sub_crawl_level > MAX_CRAWL_LEVEL_DEFAULT) {
+                continue;
+            }
 
+            if (crawl_type == QCrawlerUrl::HOST_RESTRICTED) {
+                if (sub_host == host) {
+                    QCrawlerUrl* focus_url = rec.add_focused_links();
+                    focus_url->CopyFrom(rec.raw_sub_links(i));
 
-        if (host == "travel.sina.com.cn"
-                && url_status == QCrawlerUrl::NOT_EXIST
-                && crawl_level < MAX_CRAWL_LEVEL_DEFAULT) {
-            QCrawlerUrl* focus_url = rec.add_focused_links();
-            focus_url->CopyFrom(rec.raw_sub_links(i));
+                    crawler_db->updateUrlStatus(sub_url, QCrawlerUrl::NOT_CRAWLED);
+                    log_debug(logger, "added focus url:" << sub_url);
+                }
+            } else if (crawl_type == QCrawlerUrl::UPDATE) { // update , we don't extract sub links
+                break;
+            } else {
 
-            crawler_db->updateUrlStatus(url, QCrawlerUrl::NOT_CRAWLED);
+            }
+        } else {
+            return false;
         }
     }
+
     return true;
 }
 

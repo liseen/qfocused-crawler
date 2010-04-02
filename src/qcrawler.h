@@ -26,6 +26,8 @@ public:
     void start();
 
 private:
+    QCrawlerLogger logger;
+
     QCrawlerDB* db;
     QCrawlerUrlQueue *url_queue;
 

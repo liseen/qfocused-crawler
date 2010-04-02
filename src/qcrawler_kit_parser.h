@@ -16,6 +16,7 @@ class QCrawlerKitParser  : public QCrawlerProcessor
 
 public:
     QCrawlerKitParser(QCrawlerDB *db, QCrawlerUrlQueue *queue): QCrawlerProcessor(db, queue) {
+        logger = get_qcrawler_logger("kit_parser");
         //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
         page = new QCrawlerPage();
@@ -29,6 +30,7 @@ public slots:
     virtual void process(bool r, QCrawlerRecord &rec);
 
 private:
+    QCrawlerLogger logger;
     QCrawlerPage* page;
 };
 

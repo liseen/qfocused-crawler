@@ -6,6 +6,7 @@ SOURCES +=\
     src/qcrawler_get_task.cpp\
     src/qcrawler_webpage.cpp\
     src/qcrawler_kit_parser.cpp\
+    src/qcrawler_common.cpp\
     src/qcrawler_util.cpp\
     src/qcrawler_processor.cpp\
     src/qcrawler_db.cpp\
@@ -33,5 +34,5 @@ HEADERS +=\
     src/qcrawler_focus_filter.h\
     src/qcrawler_common.h
 
-LIBS = -lprotobuf -L/usr/local/lib -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc
+LIBS = -lprotobuf -L/usr/local/lib -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx
 QT += network webkit testlib

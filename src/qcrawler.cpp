@@ -8,10 +8,14 @@ void QCrawler::start() {
 }
 
 QCrawler::QCrawler(const std::string &conf_file){
+
+    logger = get_qcrawler_logger("qcrawler");
+
     // TODO config
     QCrawlerConfig* crawler_config =  QCrawlerConfig::getInstance();
     bool init_ret = crawler_config->init(conf_file);
     if (!init_ret) {
+        log_fatal(logger, "init config failed\n");
         fprintf(stderr, "init config failed\n");
         exit(1);
     }
@@ -26,7 +30,7 @@ QCrawler::QCrawler(const std::string &conf_file){
 
     QObject::connect(get_task, SIGNAL(processFinished(bool, QCrawlerRecord &)),
             parser, SLOT(process(bool, QCrawlerRecord &)));
-    QObject::connect(parser, SIGNAL(parseFinished(bool, QCrawlerRecord &)),
+    QObject::connect(parser, SIGNAL(processFinished(bool, QCrawlerRecord &)),
             focus_filter, SLOT(process(bool, QCrawlerRecord &)));
     QObject::connect(focus_filter, SIGNAL(processFinished(bool, QCrawlerRecord &)),
             storage_record, SLOT(process(bool, QCrawlerRecord &)));
