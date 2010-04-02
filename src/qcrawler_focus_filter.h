@@ -7,18 +7,19 @@
 #include "qcrawler_common.h"
 #include "qcrawler_util.h"
 
-#include "qcrawler_db.h"
 #include "qcrawler_processor.h"
+
+#define MAX_CRAWL_LEVEL_DEFAULT 100
 
 class QCrawlerFocusFilter : public QCrawlerProcessor
 {
     Q_OBJECT
 
 public:
-    QCrawlerFocusFilter(QCrawlerDB * qc_db) {
-        qcrawler_db = qc_db;
-
+    QCrawlerFocusFilter(QCrawlerDB * db, QCrawlerUrlQueue *queue) :QCrawlerProcessor(db, queue) {
+        //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
+
     }
 
     virtual ~QCrawlerFocusFilter() {
@@ -33,9 +34,6 @@ public:
 public slots:
     virtual void process(bool r, QCrawlerRecord &rec);
 
-private:
-    QCrawlerDB * qcrawler_db;
 };
-
 
 #endif

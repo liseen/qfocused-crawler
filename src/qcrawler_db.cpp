@@ -41,12 +41,6 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     return true;
 }
 
-void QCrawlerDB::process(bool r, QCrawlerRecord &rec) {
-    bool store_ret = storeRecord(rec);
-
-    emit processFinished(store_ret, rec);
-}
-
 QCrawlerUrl::UrlStatus QCrawlerDB::getUrlStatus(std::string url) {
     QCrawlerUrl::UrlStatus url_status = QCrawlerUrl::NOT_EXIST;
     int status = 0;

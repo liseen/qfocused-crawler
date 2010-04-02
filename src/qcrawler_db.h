@@ -11,24 +11,31 @@
 
 #include "qcrawler_common.h"
 #include "qcrawler_util.h"
+#include "qcrawler_config.h"
 
-#include "qcrawler_processor.h"
-
-class QCrawlerDB : public QCrawlerProcessor
+class QCrawlerDB : public QObject
 {
     Q_OBJECT
 
 public:
     QCrawlerDB() {
-        // TODO config
+        QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
+
+        url_hash_db_host = crawler_config->url_hash_db_host();
+        url_hash_db_port = crawler_config->url_hash_db_port();
+        record_db_type = crawler_config->record_db_type();
+        record_db_host = crawler_config->record_db_host();
+        record_db_port = crawler_config->record_db_port();
+
+        //config
         record_db = tcrdbnew();
-        if(!tcrdbopen(record_db, "localhost", 1978)){
+        if(!tcrdbopen(record_db, record_db_host.c_str(), record_db_port)){
             int ecode = tcrdbecode(record_db);
             fprintf(stderr, "open error: %s\n", tcrdberrmsg(ecode));
         }
 
         url_hash_db = tcrdbnew();
-        if(!tcrdbopen(url_hash_db, "localhost", 1979)){
+        if(!tcrdbopen(url_hash_db, url_hash_db_host.c_str(), url_hash_db_port)){
             int ecode = tcrdbecode(url_hash_db);
             fprintf(stderr, "open error: %s\n", tcrdberrmsg(ecode));
         }
@@ -48,13 +55,15 @@ public:
     QCrawlerUrl::UrlStatus getUrlStatus(std::string url);
     bool updateUrlStatus(std::string url, int);
 
-public slots:
-    virtual void process(bool r, QCrawlerRecord &rec);
-
 private:
     TCRDB *record_db;
+    std::string record_db_type;
+    std::string record_db_host;
+    int record_db_port;
 
     TCRDB *url_hash_db;
+    std::string url_hash_db_host;
+    int url_hash_db_port;
 };
 
 #endif

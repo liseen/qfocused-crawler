@@ -1,15 +1,16 @@
-#include "qcrawler_parser.h"
+#include "qcrawler_kit_parser.h"
 
 #include <QList>
 #include <QWebElement>
 
-void QCrawlerParser::parse(bool r, QCrawlerRecord &rec) {
-    std::string url = rec.crawl_url().url();
-    int crawl_level = rec.crawl_url().crawl_level();
-
+void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
     if (!r) {
         return;
     }
+
+    std::string url = rec.crawl_url().url();
+    int crawl_level = rec.crawl_url().crawl_level();
+
 
     bool loadRet =  page->crawlerLoad(QUrl(QString::fromUtf8(url.c_str())));
     if (loadRet) {
@@ -49,11 +50,17 @@ void QCrawlerParser::parse(bool r, QCrawlerRecord &rec) {
                 sub_url->set_crawl_level(crawl_level + 1);
             }
 
-            qDebug() << link.attribute("href");
-            qDebug() << link.attribute("src");
+        }
+    } else {
+        QCrawlerUrl::UrlStatus url_status = crawler_db->getUrlStatus(url);
+        if (url_status <= 0) {
+            crawler_db->updateUrlStatus(url, url_status - 1);
+        } else {
+            crawler_db->updateUrlStatus(url, -1);
         }
     }
-    qDebug() << "parser\n";
-    emit parseFinished(loadRet, rec);
+
+    //qDebug() << "parser\n";
+    emit processFinished(loadRet, rec);
 }
 
