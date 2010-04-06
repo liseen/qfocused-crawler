@@ -9,6 +9,7 @@
 #include "qcrawler_util.h"
 #include "qcrawler_db.h"
 #include "qcrawler_config.h"
+#include "qcrawler_freq_control.h"
 #include "qcrawler_processor.h"
 
 class QCrawlerGetTask : public QCrawlerProcessor
@@ -16,8 +17,10 @@ class QCrawlerGetTask : public QCrawlerProcessor
     Q_OBJECT
 
 public:
-    QCrawlerGetTask(QCrawlerDB * db, QCrawlerUrlQueue *queue) : QCrawlerProcessor(db, queue) {
+    QCrawlerGetTask(QCrawlerDB * db, QCrawlerUrlQueue *queue, QCrawlerFreqControl *fc) : QCrawlerProcessor(db, queue) {
         logger = get_qcrawler_logger("get_task");
+
+        freq_control = fc;
         //QCralwerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
 
@@ -28,6 +31,7 @@ public slots:
 
 private:
     QCrawlerLogger logger;
+    QCrawlerFreqControl *freq_control;
 };
 
 #endif

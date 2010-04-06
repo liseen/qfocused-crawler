@@ -56,3 +56,10 @@ std::string QCrawlerConfig::url_queue_name() {
 }
 
 
+std::string QCrawlerConfig::freq_control_memcached_servers() {
+    return "localhost:11211";
+}
+
+int QCrawlerConfig::freq_control_cycle_time() {
+    return 10;
+}

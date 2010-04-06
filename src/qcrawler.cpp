@@ -23,7 +23,9 @@ QCrawler::QCrawler(const std::string &conf_file){
     db = new QCrawlerDB();
     url_queue = new QCrawlerUrlQueue();
 
-    get_task = new QCrawlerGetTask(db, url_queue);
+    freq_control = new QCrawlerFreqControl();
+
+    get_task = new QCrawlerGetTask(db, url_queue, freq_control);
     parser = new QCrawlerKitParser(db, url_queue);
     focus_filter = new QCrawlerFocusFilter(db, url_queue);
     storage_record = new QCrawlerStorageRecord(db, url_queue);

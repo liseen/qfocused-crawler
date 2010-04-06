@@ -36,7 +36,6 @@ bool QCrawlerFocusFilter::contentFilter(QCrawlerRecord &rec) {
 
 
 bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
-    log_debug(logger, "go into url filter");
     QCrawlerUrl::CrawlType crawl_type = rec.crawl_url().crawl_type();
     std::string host = rec.crawl_url().host();
     int size =rec.raw_sub_links_size();
@@ -49,6 +48,10 @@ bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
         QCrawlerUrl::UrlStatus url_status;
         if (crawler_db->getUrlStatus(sub_url, &url_status)) {
             if (sub_crawl_level > MAX_CRAWL_LEVEL_DEFAULT) {
+                continue;
+            }
+
+            if (url_status != QCrawlerUrl::NOT_EXIST) { // already have
                 continue;
             }
 

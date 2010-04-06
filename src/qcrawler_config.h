@@ -28,8 +28,10 @@ public:
 
     std::string url_queue_host();
     int url_queue_port();
-
     std::string url_queue_name();
+
+    std::string freq_control_memcached_servers();
+    int freq_control_cycle_time();
 
     bool init(const std::string &conf_file);
 

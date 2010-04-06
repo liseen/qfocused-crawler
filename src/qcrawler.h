@@ -8,6 +8,7 @@
 #include "qcrawler_util.h"
 #include "qcrawler_config.h"
 #include "qcrawler_db.h"
+#include "qcrawler_freq_control.h"
 #include "qcrawler_get_task.h"
 #include "qcrawler_kit_parser.h"
 #include "qcrawler_processor.h"
@@ -30,6 +31,7 @@ private:
 
     QCrawlerDB* db;
     QCrawlerUrlQueue *url_queue;
+    QCrawlerFreqControl *freq_control;
 
     QCrawlerGetTask* get_task;
     QCrawlerKitParser* parser;

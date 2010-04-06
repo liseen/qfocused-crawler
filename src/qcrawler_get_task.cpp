@@ -1,6 +1,7 @@
 #include "qcrawler_get_task.h"
 #include "qcrawler_util.h"
 
+#include "unistd.h"
 
 void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
     if (!r) {
@@ -27,18 +28,21 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
         if (url_queue->shift(&serial_str)) {
            crawl_url->ParseFromString(serial_str);
         } else {
-            qDebug() << "shift queue failed";
+            log_info(logger, "no url found in url queue");
             return;
         }
     }
 
-
+    log_debug(logger, "check freq control: " << crawl_url->host());
+    while (!freq_control->canCrawl(crawl_url->host())) {
+        log_debug(logger, "sleep 1 when crawl host: " << crawl_url->host());
+        system("sleep 1");
+    }
 
     QCrawlerUrl::UrlStatus url_status;
     bool get_ok = crawler_db->getUrlStatus(crawl_url->url(), &url_status);
 
-    log_info(logger, "get url: " << crawl_url->url());
-    log_debug(logger, "get above url status " << url_status);
+    log_info(logger, "get url: " << crawl_url->url() << "status: " << url_status);
 
     bool valid = true;
     if (!get_ok) {
