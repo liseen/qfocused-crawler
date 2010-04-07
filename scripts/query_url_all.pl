@@ -19,7 +19,7 @@ $rdb->iterinit();
 while(defined(my $key = $rdb->iternext())){
     my $value = $rdb->get($key);
     if(defined($value)){
-        printf("%s:%s\n", $key, $value);
+        printf("%s\t%s\n", $key, $value);
     }
 }
 

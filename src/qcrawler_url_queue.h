@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QQueue>
+#include <QMap>
 
 #include "qcrawler_config.h"
 
@@ -14,12 +15,15 @@ public:
     QCrawlerUrlQueue() {
         //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
+        it = host_map.end();
     }
 
-    void push(const std::string &content);
+    void push(const std::string &host, const std::string &content);
 
     bool shift(std::string *str);
 private:
+    QMap<std::string, QQueue<std::string> > host_map;
+    QMap<std::string, QQueue<std::string> >::iterator it;
     QQueue<std::string> queue;
 };
 

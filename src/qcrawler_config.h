@@ -18,6 +18,11 @@ public:
     // TRACE, DEBUG, INFO, WARN, ERROR and FATAL
     //std::string log_level();
 
+    std::string user_agent();
+    bool quit_on_no_url_found();
+    bool enable_js();
+    bool auto_load_image();
+
     std::string url_hash_db_host();
     int url_hash_db_port();
 

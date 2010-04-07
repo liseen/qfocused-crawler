@@ -32,13 +32,15 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     tcmapput2(cols, "download_time", d_time);
     tcmapput2(cols, "last_modified", l_time);
 
+    bool status = true;
     if(!tcrdbtblput(record_db, url.c_str(), key_size, cols)){
         int ecode = tcrdbecode(record_db);
-        fprintf(stderr, "put error: %s\n", tcrdberrmsg(ecode));
+        log_error(logger, "store record put error: " << tcrdberrmsg(ecode));
+        status = false;
     }
     tcmapdel(cols);
 
-    return true;
+    return status;
 }
 
 bool QCrawlerDB::getUrlStatus(std::string url, QCrawlerUrl::UrlStatus *url_status) {

@@ -46,8 +46,8 @@ QCrawlerPage::userAgentForUrl(const QUrl& url) const {
 
 bool
 QCrawlerPage::crawlerLoad(const QUrl &url) {
-    //int mTimeout = 15 * 1000;
-    int mTimeout = -1;
+    int mTimeout = 15 * 1000;
+    //int mTimeout = -1;
     if (url.isValid()) {
         QCrawlerEventLoop loop;
         QObject::connect(this, SIGNAL(loadFinished(bool)), &loop,
@@ -71,6 +71,7 @@ QCrawlerPage::crawlerLoad(const QUrl &url) {
                 this->blockSignals(true);
                 this->triggerAction(QWebPage::Stop);
                 this->blockSignals(false);
+                return false;
             } else if (!loop.getRes()) {
                 fprintf(stderr, "Failed to load page: %s\n", url.toString().toUtf8().data());
                 return false;

@@ -5,37 +5,14 @@
 #include "qcrawler_common.h"
 #include "qcrawler.h"
 
-// Get url from queue
-// Get html, raw_title, raw_content, raw_links // parser 
-// processor focused filter  //access db
-// url filter to queue /access url hash db url filter
-
-// parser input
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
-    //QWebView* view = new QWebView();
-    //view->load(QUrl("http://www.google.com"));
-    //view->show();
-/*
-    QWebPage* page = new QWebPage();
-    page->setViewportSize(QSize(1024, 728));
-    page->settings()->setAttribute(QWebSettings::JavascriptEnabled, false);
-    QWebFrame* frame = page->mainFrame();
-    frame->load(QUrl("http://www.google.com"));
+    std::string default_conf_file = "etc/qcrawler.conf.default";
+    std::string default_log_file = "etc/qcrawler_log.conf.default";
+    GLOBAL_INIT_LOGGER(default_log_file);
 
-    string str;
-    cin>>str;
-    qDebug() << frame->toHtml() << endl;
-    qDebug() << frame->toHtml() << endl;
-*/
-
-
-    std::string conf_file = "etc/qcrawler.conf";
-
-    GLOBAL_INIT_LOGGER("log/qcrawler.log");
-
-    QCrawler* crawler = new QCrawler(conf_file);
+    QCrawler* crawler = new QCrawler(default_conf_file);
 
     crawler->start();
 

@@ -8,6 +8,7 @@ void QCrawlerStorageRecord::process(bool r, QCrawlerRecord &rec) {
 
     bool store_ret = crawler_db->storeRecord(rec);
 
+    log_debug(logger, "process status: " << store_ret);
     emit processFinished(store_ret, rec);
 }
 

@@ -9,6 +9,7 @@
 #include "qcrawler_processor.h"
 
 #include "qcrawler_webpage.h"
+#include <qwebsettings.h>
 
 class QCrawlerKitParser  : public QCrawlerProcessor
 {
@@ -17,9 +18,14 @@ class QCrawlerKitParser  : public QCrawlerProcessor
 public:
     QCrawlerKitParser(QCrawlerDB *db, QCrawlerUrlQueue *queue): QCrawlerProcessor(db, queue) {
         logger = get_qcrawler_logger("kit_parser");
-        //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
+        QCrawlerConfig *config = QCrawlerConfig::getInstance();
         // TODO config
         page = new QCrawlerPage();
+
+        page->settings()->setAttribute(QWebSettings::JavascriptEnabled, config->enable_js());
+        page->settings()->setAttribute(QWebSettings::AutoLoadImages, config->auto_load_image());
+        page->settings()->setAttribute(QWebSettings::JavaEnabled, false);
+        page->settings()->setAttribute(QWebSettings::PluginsEnabled, false);
     }
 
     ~QCrawlerKitParser() {

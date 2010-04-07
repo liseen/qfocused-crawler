@@ -25,6 +25,8 @@ void QCrawlerFocusFilter::process(bool r, QCrawlerRecord &rec) {
     }
 
     insertFocusedUrls(rec);
+
+    emit processFinished(true, rec);
 }
 
 
@@ -89,7 +91,7 @@ bool QCrawlerFocusFilter::insertFocusedUrls(const QCrawlerRecord &rec) {
         std::string serial_str;
         rec.focused_links(i).SerializeToString(&serial_str);
 
-        url_queue->push(serial_str);
+        url_queue->push(rec.focused_links(i).host(), serial_str);
     }
 
     return true;

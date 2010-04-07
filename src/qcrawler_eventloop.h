@@ -12,7 +12,6 @@ public:
 
 public Q_SLOTS:
     void quitWithRes(bool res) {
-        qDebug() << "quit with result!" << endl;
         m_res = res;
         isFinished = true;
         quit();

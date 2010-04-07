@@ -32,6 +32,7 @@ HEADERS +=\
     src/qcrawler_eventloop.h\
     src/qcrawler_record.pb.h\
     src/qcrawler_focus_filter.h\
+    src/qcrawler_sleep.h\
     src/qcrawler_common.h
 
 LIBS = -lprotobuf -L/usr/local/lib -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached
