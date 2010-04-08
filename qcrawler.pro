@@ -35,5 +35,6 @@ HEADERS +=\
     src/qcrawler_sleep.h\
     src/qcrawler_common.h
 
-LIBS = -lprotobuf -L/usr/local/lib -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached
+INCLUDEPATH  = /opt/qcrawler-thirdparty/include
+LIBS = -L/opt/qcrawler-thirdparty/lib -L/usr/local/lib -lprotobuf -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached
 QT += network webkit testlib
