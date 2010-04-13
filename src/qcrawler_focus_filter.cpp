@@ -53,12 +53,16 @@ bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
                 continue;
             }
 
-            if (url_status != QCrawlerUrl::NOT_EXIST) { // already have
-                continue;
-            }
-
             if (crawl_type == QCrawlerUrl::HOST_RESTRICTED) {
-                if (sub_host == host) {
+                if (url_status != QCrawlerUrl::NOT_EXIST) { // already have
+                    continue;
+                }
+
+                // end with host
+                int sub_host_size = sub_host.size();
+                int host_size = host.size();
+                if (sub_host_size >= host_size &&
+                        sub_host.substr(sub_host_size - host_size, host_size) == host) {
                     QCrawlerUrl* focus_url = rec.add_focused_links();
                     focus_url->CopyFrom(rec.raw_sub_links(i));
 

@@ -1,0 +1,2 @@
+1 sudo apt-get install libx11-dev libxext-dev
+  or sudo yum install libXext-devel.x86_64

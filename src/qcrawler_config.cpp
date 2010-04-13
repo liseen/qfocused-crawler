@@ -29,9 +29,9 @@ std::string QCrawlerConfig::user_agent() {
 }
 
 bool QCrawlerConfig::quit_on_no_url_found() {
-    QString need_quit = settings->value("quit_on_on_url_found").toString();
+    QString need_quit = settings->value("quit_on_no_url_found").toString();
 
-    qDebug() << "need quit on url no found: " << need_quit;
+    //qDebug() << "need quit on url no found: " << need_quit;
     if (need_quit.isEmpty()) {
         return 1;
     }

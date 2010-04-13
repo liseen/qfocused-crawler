@@ -24,10 +24,11 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
                     continue;
                 }
 
-                c_url.set_url(url);
+                c_url.set_url(qurl.toString().toUtf8().constData());
                 c_url.set_crawl_level(0);
                 c_url.set_host(host);
                 c_url.set_crawl_type(QCrawlerUrl::HOST_RESTRICTED);
+                //c_url.set_crawl_type(QCrawlerUrl::UPDATE);
                 std::string s_str;
                 c_url.SerializeToString(&s_str);
                 url_queue->push(host, s_str);
@@ -44,6 +45,8 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
         QCrawlerConfig* crawler_config =  QCrawlerConfig::getInstance();
         if (crawler_config->quit_on_no_url_found()) {
             exit(2);
+        } else {
+            QCrawlerSleep::sleep(1);
         }
 
         return;

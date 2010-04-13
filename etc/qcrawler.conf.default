@@ -2,7 +2,7 @@
 user_agent=Qunarbot/1.0
 enable_js=0
 auto_load_image=0
-quit_on_no_url_found_=1
+quit_on_no_url_found=1
 
 
 [url_hash_db]

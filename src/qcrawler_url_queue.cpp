@@ -1,6 +1,7 @@
 #include "qcrawler_url_queue.h"
 
 void QCrawlerUrlQueue::push(const std::string &host, const std::string &content) {
+    //fprintf(stderr, "host map's add host: %s\n", host.c_str());
     if (host_map.contains(host)) {
         host_map[host].enqueue(content);
     } else {
@@ -16,6 +17,7 @@ bool QCrawlerUrlQueue::shift(std::string *str) {
     //    return true;
     //}
 
+    //fprintf(stderr, "host map's size: %d\n", host_map.size());
     if (host_map.size() < 1) {
         return false;
     }
@@ -27,8 +29,9 @@ bool QCrawlerUrlQueue::shift(std::string *str) {
 
     bool status = false;
     while (it != host_map.end()) {
-        if (! (*it).isEmpty()) {
-            *str = (*it).dequeue();
+    	//fprintf(stderr, "shift host map: %s, queue size: %d\n", it.key().c_str(), it.value().size());
+        if (! it.value().isEmpty()) {
+            *str = it.value().dequeue();
             status = true;
             ++it;
             break;
@@ -37,7 +40,7 @@ bool QCrawlerUrlQueue::shift(std::string *str) {
         ++it;
     }
 
-       return status;
+    return status;
 }
 
 

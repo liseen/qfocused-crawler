@@ -16,5 +16,5 @@ test -d log || mkdir -p log
 test -d data || mkdir -p data
 
 #xmsiz=536870912 512M at least
-exec ttserver -port 1979 -thnum 10 -log "$LOGFILE" -dmn -le "${DATAFILE}#bnum=10000000#opts=lb#rcnum=5000"
+exec ttserver -port 1979 -thnum 10 -log "$LOGFILE" -le "${DATAFILE}#bnum=10000000#opts=lb#rcnum=5000"
 #ttserver -port 1979 -thnum 10 -le "${DATAFILE}#bnum=1000000#opts=lb#rcnum=5000"

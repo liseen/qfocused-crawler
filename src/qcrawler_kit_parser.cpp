@@ -24,7 +24,8 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
         rec.set_raw_title(frame->title().toUtf8().constData());
         rec.set_raw_html(frame->toHtml().toUtf8().constData());
         rec.set_raw_content(frame->toPlainText().toUtf8().constData());
-        QWebElement document = frame->documentElement();
+
+        //QWebElement document = frame->documentElement();
         // TODO get all links from
         // a => href area =>href base del=>cite
         // frame src longdesc
@@ -32,7 +33,7 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
         // iframe => src
         // ilayer =>
         // background ...
-        QWebElementCollection allLinks = document.findAll("a,frame,iframe,area,map");
+        QWebElementCollection allLinks = frame->findAllElements("a,frame,iframe,area,map");
         // local unique first
         QHash<QString, int> dedupHash;
         foreach (QWebElement link, allLinks) {
@@ -48,9 +49,14 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
             }
 
             QUrl qurl(l);
-            if (l.startsWith("http") && qurl.isValid()) {
+            if (qurl.isRelative()) {
+                qurl = frame->baseUrl().resolved(l);
+            }
+
+            if (!l.startsWith("#") && qurl.scheme().startsWith("http") && qurl.isValid()) {
                 QCrawlerUrl* sub_url = rec.add_raw_sub_links();
                 sub_url->set_url(qurl.toString().toUtf8().constData());
+                sub_url->set_anchor_text(link.toPlainText().toUtf8().constData());
                 sub_url->set_host(qurl.host().toUtf8().constData());
                 sub_url->set_crawl_level(crawl_level + 1);
             }

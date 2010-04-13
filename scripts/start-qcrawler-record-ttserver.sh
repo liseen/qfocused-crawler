@@ -11,11 +11,11 @@ BIN=$(readlink -f -- $(dirname -- "$0"))
 cd $BIN/..
 
 LOGFILE=log/qcrawler_record_ttserver.log
-DATAFILE=data/qcrawler_record.tct
+DATAFILE=data/qcrawler-record.tct
 
 test -d log || mkdir -p log
 test -d data || mkdir -p data
 
 #Table database supports "mode", "bnum", "apow", "fpow", "opts", "rcnum", "lcnum", "ncnum", "xmsiz", "dfunit", and "idx".
-exec ttserver -port 1978 -thnum 10 -log "$LOGFILE" -dmn -le "${DATAFILE}#bnum=10000000#opts=lb#rcnum=200"
-#ttserver -port 1978 -thnum 10 -le "${DATAFILE}#bnum=100000#opts=lb#rcnum=200"
+exec ttserver -port 1978 -thnum 20 -log "$LOGFILE" -le "${DATAFILE}#bnum=10000000#opts=lb#rcnum=200"
+#ttserver -port 1978 -thnum 20 -le "${DATAFILE}#bnum=100000#opts=lb#rcnum=200"
