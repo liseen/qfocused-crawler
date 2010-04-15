@@ -10,6 +10,7 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     std::string raw_content = rec.raw_content();
     int download_time = rec.download_time();
     int last_modified = rec.last_modified();
+    int loading_time =  rec.loading_time();
 
     int key_size = url.size();
 
@@ -27,10 +28,13 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     char d_time[40]; //enough for 64bit?
     sprintf(d_time, "%d", download_time);
 
-    char l_time[40]; //enough for 64bit?
-    sprintf(l_time, "%d", last_modified);
+    char last_time[40]; //enough for 64bit?
+    sprintf(last_time, "%d", last_modified);
+    char lo_time[40]; //enough for 64bit?
+    sprintf(lo_time, "%d", loading_time);
     tcmapput2(cols, "download_time", d_time);
-    tcmapput2(cols, "last_modified", l_time);
+    tcmapput2(cols, "last_modified", last_time);
+    tcmapput2(cols, "loading_time", lo_time);
 
     bool status = true;
     if(!tcrdbtblput(record_db, url.c_str(), key_size, cols)){

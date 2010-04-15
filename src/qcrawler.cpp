@@ -1,4 +1,5 @@
 #include "qcrawler.h"
+#include "qcrawler_central_queue.h"
 
 void QCrawler::start() {
     while (true) {
@@ -21,7 +22,8 @@ QCrawler::QCrawler(const std::string &conf_file){
     }
 
     db = new QCrawlerDB();
-    url_queue = new QCrawlerUrlQueue();
+    //url_queue = new QCrawlerUrlQueue();
+    url_queue = new QCrawlerCentralQueue();
 
     freq_control = new QCrawlerFreqControl();
 

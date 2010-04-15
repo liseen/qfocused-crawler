@@ -1,7 +1,9 @@
 #include "qcrawler_kit_parser.h"
+#include "qcrawler_util.h"
 
 #include <QList>
 #include <QWebElement>
+#include <QTime>
 
 void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
     if (!r) {
@@ -11,7 +13,8 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
     std::string url = rec.crawl_url().url();
     int crawl_level = rec.crawl_url().crawl_level();
 
-
+    QTime begin_time;
+    begin_time.start();
     bool loadRet =  page->crawlerLoad(QUrl(QString::fromUtf8(url.c_str())));
     log_debug(logger, "load status: " << loadRet);
 
@@ -24,6 +27,8 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
         rec.set_raw_title(frame->title().toUtf8().constData());
         rec.set_raw_html(frame->toHtml().toUtf8().constData());
         rec.set_raw_content(frame->toPlainText().toUtf8().constData());
+        rec.set_download_time(get_current_time());
+        rec.set_loading_time(begin_time.elapsed());
 
         //QWebElement document = frame->documentElement();
         // TODO get all links from

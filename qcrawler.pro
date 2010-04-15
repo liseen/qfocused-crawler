@@ -11,6 +11,7 @@ SOURCES +=\
     src/qcrawler_processor.cpp\
     src/qcrawler_db.cpp\
     src/qcrawler_url_queue.cpp\
+    src/qcrawler_central_queue.cpp\
     src/qcrawler_storage_record.cpp\
     src/qcrawler_focus_filter.cpp\
     src/qcrawler_config.cpp\
@@ -24,6 +25,7 @@ HEADERS +=\
     src/qcrawler_freq_control.h\
     src/qcrawler_db.h\
     src/qcrawler_url_queue.h\
+    src/qcrawler_central_queue.h\
     src/qcrawler_config.h\
     src/qcrawler_processor.h\
     src/qcrawler_kit_parser.h\
@@ -36,5 +38,5 @@ HEADERS +=\
     src/qcrawler_common.h
 
 INCLUDEPATH  = /opt/qcrawler-thirdparty/include
-LIBS = -L/opt/qcrawler-thirdparty/lib -L/usr/local/lib -lprotobuf -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached
+LIBS = -L/opt/qcrawler-thirdparty/lib -L/usr/local/lib -lprotobuf -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached -lurlqueue
 QT += network webkit testlib

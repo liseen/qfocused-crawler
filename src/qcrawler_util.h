@@ -7,5 +7,6 @@
 #include "qcrawler_common.h"
 
 void debug_record(const QCrawlerRecord &rec);
+int get_current_time();
 
 #endif

@@ -52,16 +52,17 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
         return;
     }
 
-    log_debug(logger, "check freq control: " << crawl_url->host());
-    while (!freq_control->canCrawl(crawl_url->host())) {
-        log_debug(logger, "sleep 1 when crawl host: " << crawl_url->host());
-        QCrawlerSleep::sleep(1);
+    // enabled freq control
+    if (QCrawlerConfig::getInstance()->need_freq_control()) {
+        while (!freq_control->canCrawl(crawl_url->host())) {
+            QCrawlerSleep::sleep(1);
+        }
     }
 
     QCrawlerUrl::UrlStatus url_status;
     bool get_ok = crawler_db->getUrlStatus(crawl_url->url(), &url_status);
 
-    log_info(logger, "get url: " << crawl_url->url() << "status: " << url_status);
+    std::cout << "host: " << crawl_url->host() << " url: " << crawl_url->url() << " status: " << url_status << std::endl;
 
     bool valid = true;
     if (!get_ok) {

@@ -76,7 +76,7 @@ void protobuf_AssignDesc_qcrawler_5frecord_2eproto() {
   QCrawlerUrl_LinkType_descriptor_ = QCrawlerUrl_descriptor_->enum_type(1);
   QCrawlerUrl_UrlStatus_descriptor_ = QCrawlerUrl_descriptor_->enum_type(2);
   QCrawlerRecord_descriptor_ = file->message_type(2);
-  static const int QCrawlerRecord_offsets_[11] = {
+  static const int QCrawlerRecord_offsets_[12] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, crawl_url_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, raw_html_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, raw_title_),
@@ -87,6 +87,7 @@ void protobuf_AssignDesc_qcrawler_5frecord_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, content_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, focused_links_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, download_time_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, loading_time_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QCrawlerRecord, last_modified_),
   };
   QCrawlerRecord_reflection_ =
@@ -155,14 +156,14 @@ void protobuf_AddDesc_qcrawler_5frecord_2eproto() {
     "\377\377\377\377\377\377\377\377\001\022\033\n\016FAILED_CRAWL_2\020\376\377\377\377\377\377\377\377\377\001\022\033"
     "\n\016FAILED_CRAWL_3\020\375\377\377\377\377\377\377\377\377\001\022\033\n\016FAILED_CR"
     "AWL_4\020\374\377\377\377\377\377\377\377\377\001\022\033\n\016FAILED_CRAWL_5\020\373\377\377\377\377"
-    "\377\377\377\377\001\"\234\002\n\016QCrawlerRecord\022\037\n\tcrawl_url\030\001 "
+    "\377\377\377\377\001\"\262\002\n\016QCrawlerRecord\022\037\n\tcrawl_url\030\001 "
     "\002(\0132\014.QCrawlerUrl\022\020\n\010raw_html\030\010 \001(\t\022\021\n\tr"
     "aw_title\030\002 \001(\t\022\023\n\013raw_content\030\003 \001(\t\022\027\n\017r"
     "aw_content_md5\030\004 \001(\t\022#\n\rraw_sub_links\030\005 "
     "\003(\0132\014.QCrawlerUrl\022\r\n\005title\030\006 \001(\t\022\017\n\007cont"
     "ent\030\007 \001(\t\022#\n\rfocused_links\030\t \003(\0132\014.QCraw"
-    "lerUrl\022\025\n\rdownload_time\030\n \001(\005\022\025\n\rlast_mo"
-    "dified\030\013 \001(\005", 972);
+    "lerUrl\022\025\n\rdownload_time\030\n \001(\005\022\024\n\014loading"
+    "_time\030\013 \001(\005\022\025\n\rlast_modified\030\014 \001(\005", 994);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "qcrawler_record.proto", &protobuf_RegisterTypes);
   QCrawlerUrlMeta::default_instance_ = new QCrawlerUrlMeta();
@@ -1104,6 +1105,7 @@ const int QCrawlerRecord::kTitleFieldNumber;
 const int QCrawlerRecord::kContentFieldNumber;
 const int QCrawlerRecord::kFocusedLinksFieldNumber;
 const int QCrawlerRecord::kDownloadTimeFieldNumber;
+const int QCrawlerRecord::kLoadingTimeFieldNumber;
 const int QCrawlerRecord::kLastModifiedFieldNumber;
 #endif  // !_MSC_VER
 
@@ -1132,6 +1134,7 @@ void QCrawlerRecord::SharedCtor() {
   title_ = const_cast< ::std::string*>(&_default_title_);
   content_ = const_cast< ::std::string*>(&_default_content_);
   download_time_ = 0;
+  loading_time_ = 0;
   last_modified_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -1222,6 +1225,7 @@ void QCrawlerRecord::Clear() {
   }
   if (_has_bits_[9 / 32] & (0xffu << (9 % 32))) {
     download_time_ = 0;
+    loading_time_ = 0;
     last_modified_ = 0;
   }
   raw_sub_links_.Clear();
@@ -1393,19 +1397,35 @@ bool QCrawlerRecord::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
-        if (input->ExpectTag(88)) goto parse_last_modified;
+        if (input->ExpectTag(88)) goto parse_loading_time;
         break;
       }
       
-      // optional int32 last_modified = 11;
+      // optional int32 loading_time = 11;
       case 11: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
+         parse_loading_time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &loading_time_)));
+          _set_bit(10);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(96)) goto parse_last_modified;
+        break;
+      }
+      
+      // optional int32 last_modified = 12;
+      case 12: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_last_modified:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &last_modified_)));
-          _set_bit(10);
+          _set_bit(11);
         } else {
           goto handle_uninterpreted;
         }
@@ -1508,9 +1528,14 @@ void QCrawlerRecord::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->download_time(), output);
   }
   
-  // optional int32 last_modified = 11;
+  // optional int32 loading_time = 11;
   if (_has_bit(10)) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->last_modified(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->loading_time(), output);
+  }
+  
+  // optional int32 last_modified = 12;
+  if (_has_bit(11)) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->last_modified(), output);
   }
   
   if (!unknown_fields().empty()) {
@@ -1607,9 +1632,14 @@ void QCrawlerRecord::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->download_time(), target);
   }
   
-  // optional int32 last_modified = 11;
+  // optional int32 loading_time = 11;
   if (_has_bit(10)) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->last_modified(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->loading_time(), target);
+  }
+  
+  // optional int32 last_modified = 12;
+  if (_has_bit(11)) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(12, this->last_modified(), target);
   }
   
   if (!unknown_fields().empty()) {
@@ -1681,7 +1711,14 @@ int QCrawlerRecord::ByteSize() const {
           this->download_time());
     }
     
-    // optional int32 last_modified = 11;
+    // optional int32 loading_time = 11;
+    if (has_loading_time()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(
+          this->loading_time());
+    }
+    
+    // optional int32 last_modified = 12;
     if (has_last_modified()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
@@ -1760,6 +1797,9 @@ void QCrawlerRecord::MergeFrom(const QCrawlerRecord& from) {
       set_download_time(from.download_time());
     }
     if (from._has_bit(10)) {
+      set_loading_time(from.loading_time());
+    }
+    if (from._has_bit(11)) {
       set_last_modified(from.last_modified());
     }
   }
@@ -1805,6 +1845,7 @@ void QCrawlerRecord::Swap(QCrawlerRecord* other) {
     std::swap(content_, other->content_);
     focused_links_.Swap(&other->focused_links_);
     std::swap(download_time_, other->download_time_);
+    std::swap(loading_time_, other->loading_time_);
     std::swap(last_modified_, other->last_modified_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

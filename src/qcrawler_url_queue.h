@@ -18,9 +18,9 @@ public:
         it = host_map.end();
     }
 
-    void push(const std::string &host, const std::string &content);
+    virtual void push(const std::string &host, const std::string &content);
 
-    bool shift(std::string *str);
+    virtual bool shift(std::string *str);
 private:
     QMap<std::string, QQueue<std::string> > host_map;
     QMap<std::string, QQueue<std::string> >::iterator it;

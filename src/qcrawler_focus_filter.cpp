@@ -31,7 +31,7 @@ void QCrawlerFocusFilter::process(bool r, QCrawlerRecord &rec) {
 
 
 
-bool QCrawlerFocusFilter::contentFilter(QCrawlerRecord &rec) {
+bool QCrawlerFocusFilter::contentFilter(QCrawlerRecord &) {
 
     return true;
 }

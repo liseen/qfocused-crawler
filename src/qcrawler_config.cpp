@@ -2,7 +2,8 @@
 
 QCrawlerConfig* QCrawlerConfig::config = NULL;
 
-QCrawlerConfig* QCrawlerConfig::getInstance() {
+QCrawlerConfig* QCrawlerConfig::getInstance()
+{
     if (config != NULL) {
         return config;
     } else {
@@ -11,7 +12,8 @@ QCrawlerConfig* QCrawlerConfig::getInstance() {
     }
 }
 
-bool QCrawlerConfig::init(const std::string &conf_file) {
+bool QCrawlerConfig::init(const std::string &conf_file)
+{
     settings = new QSettings(QString::fromUtf8(conf_file.c_str()), QSettings::IniFormat);
     if (QSettings::NoError == settings->status()) {
         return true;
@@ -20,7 +22,8 @@ bool QCrawlerConfig::init(const std::string &conf_file) {
     return false;
 }
 
-std::string QCrawlerConfig::user_agent() {
+std::string QCrawlerConfig::user_agent()
+{
     QString user_agent = settings->value("user_agent").toString();
     if (user_agent.isEmpty()) {
         return "user_agent";
@@ -28,7 +31,8 @@ std::string QCrawlerConfig::user_agent() {
     return user_agent.toUtf8().constData();
 }
 
-bool QCrawlerConfig::quit_on_no_url_found() {
+bool QCrawlerConfig::quit_on_no_url_found()
+{
     QString need_quit = settings->value("quit_on_no_url_found").toString();
 
     //qDebug() << "need quit on url no found: " << need_quit;
@@ -39,7 +43,8 @@ bool QCrawlerConfig::quit_on_no_url_found() {
     return (bool)need_quit.toInt();
 }
 
-bool QCrawlerConfig::enable_js() {
+bool QCrawlerConfig::enable_js()
+{
     QString enable_js = settings->value("enable_js").toString();
 
     if (enable_js.isEmpty()) {
@@ -48,13 +53,24 @@ bool QCrawlerConfig::enable_js() {
     return (bool)enable_js.toInt();
 }
 
-bool QCrawlerConfig::auto_load_image() {
+bool QCrawlerConfig::auto_load_image()
+{
     QString auto_load = settings->value("auto_load_image").toString();
 
     if (auto_load.isEmpty()) {
         return 0;
     }
     return (bool)auto_load.toInt();
+}
+
+bool QCrawlerConfig::need_freq_control()
+{
+    QString need = settings->value("need_freq_control").toString();
+
+    if (need.isEmpty()) {
+        return true;
+    }
+    return (bool)need.toInt();
 }
 
 std::string QCrawlerConfig::url_hash_db_host() {
@@ -114,39 +130,16 @@ int QCrawlerConfig::record_db_port() {
     return port.toInt();
 }
 
-std::string QCrawlerConfig::url_queue_host() {
+std::string QCrawlerConfig::url_queue_server() {
     settings->beginGroup("url_queue");
-    QString host = settings->value("host").toString();
+    QString host = settings->value("server").toString();
     settings->endGroup();
 
     if (host.isEmpty()) {
-        return "localhost";
+        return "localhost:19854";
     }
     return host.toUtf8().constData();
 }
-
-int QCrawlerConfig::url_queue_port() {
-    settings->beginGroup("url_queue");
-    QString port = settings->value("port").toString();
-    settings->endGroup();
-
-    if (port.isEmpty()) {
-        return 3380;
-    }
-    return port.toInt();
-}
-
-std::string QCrawlerConfig::url_queue_name() {
-    settings->beginGroup("url_queue");
-    QString name = settings->value("name").toString();
-    settings->endGroup();
-
-    if (name.isEmpty()) {
-        return "urlqueue";
-    }
-    return name.toUtf8().constData();
-}
-
 
 std::string QCrawlerConfig::freq_control_memcached_servers() {
     settings->beginGroup("freq_control");

@@ -1,6 +1,9 @@
 #include "qcrawler_util.h"
 
-void debug_record(const QCrawlerRecord &rec) {
+#include <sys/time.h>
+
+void debug_record(const QCrawlerRecord &rec)
+{
     std::string str;
 
     google::protobuf::TextFormat::Printer printer;
@@ -8,5 +11,13 @@ void debug_record(const QCrawlerRecord &rec) {
     printer.PrintToString(rec, &str);
     fprintf(stderr, "%s", str.c_str());
 }
+
+int get_current_time()
+{
+    struct timeval timer;
+    gettimeofday(&timer, NULL);
+    return timer.tv_sec;
+}
+
 
 

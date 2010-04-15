@@ -591,10 +591,17 @@ class QCrawlerRecord : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 download_time() const;
   inline void set_download_time(::google::protobuf::int32 value);
   
-  // optional int32 last_modified = 11;
+  // optional int32 loading_time = 11;
+  inline bool has_loading_time() const;
+  inline void clear_loading_time();
+  static const int kLoadingTimeFieldNumber = 11;
+  inline ::google::protobuf::int32 loading_time() const;
+  inline void set_loading_time(::google::protobuf::int32 value);
+  
+  // optional int32 last_modified = 12;
   inline bool has_last_modified() const;
   inline void clear_last_modified();
-  static const int kLastModifiedFieldNumber = 11;
+  static const int kLastModifiedFieldNumber = 12;
   inline ::google::protobuf::int32 last_modified() const;
   inline void set_last_modified(::google::protobuf::int32 value);
   
@@ -619,12 +626,13 @@ class QCrawlerRecord : public ::google::protobuf::Message {
   static const ::std::string _default_content_;
   ::google::protobuf::RepeatedPtrField< ::QCrawlerUrl > focused_links_;
   ::google::protobuf::int32 download_time_;
+  ::google::protobuf::int32 loading_time_;
   ::google::protobuf::int32 last_modified_;
   friend void  protobuf_AddDesc_qcrawler_5frecord_2eproto();
   friend void protobuf_AssignDesc_qcrawler_5frecord_2eproto();
   friend void protobuf_ShutdownFile_qcrawler_5frecord_2eproto();
   
-  ::google::protobuf::uint32 _has_bits_[(11 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
   
   // WHY DOES & HAVE LOWER PRECEDENCE THAN != !?
   inline bool _has_bit(int index) const {
@@ -1258,19 +1266,35 @@ inline void QCrawlerRecord::set_download_time(::google::protobuf::int32 value) {
   download_time_ = value;
 }
 
-// optional int32 last_modified = 11;
-inline bool QCrawlerRecord::has_last_modified() const {
+// optional int32 loading_time = 11;
+inline bool QCrawlerRecord::has_loading_time() const {
   return _has_bit(10);
+}
+inline void QCrawlerRecord::clear_loading_time() {
+  loading_time_ = 0;
+  _clear_bit(10);
+}
+inline ::google::protobuf::int32 QCrawlerRecord::loading_time() const {
+  return loading_time_;
+}
+inline void QCrawlerRecord::set_loading_time(::google::protobuf::int32 value) {
+  _set_bit(10);
+  loading_time_ = value;
+}
+
+// optional int32 last_modified = 12;
+inline bool QCrawlerRecord::has_last_modified() const {
+  return _has_bit(11);
 }
 inline void QCrawlerRecord::clear_last_modified() {
   last_modified_ = 0;
-  _clear_bit(10);
+  _clear_bit(11);
 }
 inline ::google::protobuf::int32 QCrawlerRecord::last_modified() const {
   return last_modified_;
 }
 inline void QCrawlerRecord::set_last_modified(::google::protobuf::int32 value) {
-  _set_bit(10);
+  _set_bit(11);
   last_modified_ = value;
 }
 
