@@ -46,7 +46,7 @@ QCrawlerPage::userAgentForUrl(const QUrl& url) const {
 
 bool
 QCrawlerPage::crawlerLoad(const QUrl &url) {
-    int mTimeout = 15 * 1000;
+    int mTimeout = 60 * 1000;
     //int mTimeout = -1;
     if (url.isValid()) {
         QCrawlerEventLoop loop;
