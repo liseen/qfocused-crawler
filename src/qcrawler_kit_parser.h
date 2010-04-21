@@ -17,7 +17,6 @@ class QCrawlerKitParser  : public QCrawlerProcessor
 
 public:
     QCrawlerKitParser(QCrawlerDB *db, QCrawlerUrlQueue *queue): QCrawlerProcessor(db, queue) {
-        logger = get_qcrawler_logger("kit_parser");
         QCrawlerConfig *config = QCrawlerConfig::getInstance();
         // TODO config
         page = new QCrawlerPage();
@@ -38,7 +37,7 @@ public:
         page->settings()->setAttribute(QWebSettings::DeveloperExtrasEnabled, false);
         page->settings()->setAttribute(QWebSettings::PrintElementBackgrounds, false);
 
-        page->setUserAgent(QString::fromUtf8(config->user_agent().c_str()));
+        page->setUserAgent(config->user_agent());
     }
 
     ~QCrawlerKitParser() {
@@ -46,10 +45,9 @@ public:
     }
 
 public slots:
-    virtual void process(bool r, QCrawlerRecord &rec);
+    virtual int process(QCrawlerRecord &rec);
 
 private:
-    QCrawlerLogger logger;
     QCrawlerPage* page;
 };
 

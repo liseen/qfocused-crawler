@@ -21,7 +21,6 @@ class QCrawlerStorageRecord : public QCrawlerProcessor
 
 public:
     QCrawlerStorageRecord(QCrawlerDB * db, QCrawlerUrlQueue *queue) :QCrawlerProcessor(db, queue) {
-        logger = get_qcrawler_logger("storage_record");
         //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
         // TODO config
 
@@ -29,15 +28,10 @@ public:
 
 
 
-    virtual ~QCrawlerStorageRecord() {
-
-    }
-
 public slots:
-    virtual void process(bool r, QCrawlerRecord &rec);
+    virtual int process(QCrawlerRecord &rec);
 
 private:
-    QCrawlerLogger logger;
 };
 
 #endif

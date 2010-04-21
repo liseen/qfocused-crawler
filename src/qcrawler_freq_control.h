@@ -15,23 +15,19 @@ class QCrawlerFreqControl : QObject
 
 public:
     QCrawlerFreqControl() {
-        logger = get_qcrawler_logger("freq_control");
-
         QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
 
         cycle_time = crawler_config->freq_control_cycle_time();
         servers_str =  crawler_config->freq_control_memcached_servers();
 
-        log_debug(logger, "freq control memcached servers: " << servers_str );
-
         memc = memcached_create(NULL);
         memcached_server_st *servers;
-        servers= memcached_servers_parse((char*)servers_str.c_str());
+        servers= memcached_servers_parse(servers_str.toUtf8().data());
         if (servers != NULL) {
             memcached_server_push(memc, servers);
             memcached_server_list_free(servers);
         } else {
-            log_fatal(logger, "freq control memcached server config error or no servers found");
+            fprintf(stderr, "freq control memcached server config error or no servers found\n");
         }
 
         //log_debug(logger, "freq control memcached set binary protocal");
@@ -43,13 +39,12 @@ public:
         memcached_free(memc);
     }
 
-    bool canCrawl(const std::string &host);
+    bool canCrawl(const QString &host);
 
 private:
-    QCrawlerLogger logger;
     memcached_st *memc;
     int cycle_time;
-    std::string servers_str;
+    QString servers_str;
 };
 
 #endif

@@ -5,6 +5,7 @@ auto_load_image=0
 quit_on_no_url_found=0
 proxy_enabled=0
 need_freq_control=0
+enable_central_queue=1
 
 [log]
 
@@ -28,5 +29,5 @@ server=localhost:19854
 memcached_servers=localhost:11211
 cycle_time=3
 
-
-
+[focus_filter]
+bin_extension=arff au avi class exe fig gif gz hqx ica jpeg jpg mat mdb mov mp3 mpeg mpg msi pcx pdb psd ram rar raw rmd rmx sav sdd shar tar tga tgz tif tiff vo wav wmv wmz xbm xpm z zip

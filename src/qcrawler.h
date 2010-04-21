@@ -14,6 +14,7 @@
 #include "qcrawler_processor.h"
 #include "qcrawler_focus_filter.h"
 #include "qcrawler_storage_record.h"
+#include "qcrawler_central_queue.h"
 /**
  * crawler
  */
@@ -22,13 +23,12 @@ class QCrawler : public QObject
     Q_OBJECT
 
 public:
-    QCrawler(const std::string &conf_file);
+    QCrawler();
+    ~QCrawler();
 
     void start();
 
 private:
-    QCrawlerLogger logger;
-
     QCrawlerDB* db;
     QCrawlerUrlQueue *url_queue;
     QCrawlerFreqControl *freq_control;
@@ -37,6 +37,9 @@ private:
     QCrawlerKitParser* parser;
     QCrawlerFocusFilter* focus_filter;
     QCrawlerStorageRecord* storage_record;
+
+
+    QVector<QCrawlerProcessor*> processors;
 };
 
 #endif

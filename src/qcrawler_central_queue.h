@@ -12,17 +12,16 @@ class QCrawlerCentralQueue : public QCrawlerUrlQueue {
 public:
     QCrawlerCentralQueue() {
         QCrawlerConfig *config = QCrawlerConfig::getInstance();
-        std::string server = config->url_queue_server();
-        client = new UrlQueueClient(server);
+        QString server = config->url_queue_server();
+        client = new UrlQueueClient(server.toStdString());
     }
 
     ~QCrawlerCentralQueue() {
         delete client;
     }
 
-    virtual void push(const std::string &host, const std::string &content);
-
-    virtual bool shift(std::string *str);
+    virtual void push(const QString &host, const QByteArray &content);
+    virtual bool shift(QByteArray *content);
 private:
     UrlQueueClient *client;
 };

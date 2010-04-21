@@ -19,7 +19,7 @@ public:
     }
 
 public slots:
-    virtual void process(bool r, QCrawlerRecord &rec);
+    virtual int process(QCrawlerRecord &rec);
 
 signals:
     void processFinished(bool, QCrawlerRecord &rec);

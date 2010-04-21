@@ -2,12 +2,16 @@
 
 
 bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
-    std::string url = rec.crawl_url().url();
+    QString url = rec.crawl_url().url();
+    QString url_md5 = rec.crawl_url().url_md5();
+    QString parent_url_md5 = rec.crawl_url().parent_url_md5();
     int crawl_level = rec.crawl_url().crawl_level();
-    std::string anchor_text = rec.crawl_url().anchor_text();
-    std::string raw_html = rec.raw_html();
-    std::string raw_title = rec.raw_title();
-    std::string raw_content = rec.raw_content();
+    QString anchor_text = rec.crawl_url().anchor_text();
+    QString raw_html = rec.raw_html();
+    QString raw_title = rec.raw_title();
+    QString raw_content = rec.raw_content();
+    QString raw_content_md5 = md5_hash(raw_content);
+
     int download_time = rec.download_time();
     int last_modified = rec.last_modified();
     int loading_time =  rec.loading_time();
@@ -15,31 +19,24 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     int key_size = url.size();
 
     TCMAP *cols = tcmapnew();
-    tcmapput2(cols, "url", url.c_str());
+    tcmapput2(cols, "url", url.toUtf8().constData());
+    tcmapput2(cols, "url_md5", url_md5.toUtf8().constData());
+    tcmapput2(cols, "parent_url_md5", parent_url_md5.toUtf8().constData());
+    tcmapput2(cols, "crawl_level", QByteArray::number(crawl_level).constData());
+    tcmapput2(cols, "anchor_text", anchor_text.toUtf8().constData());
+    tcmapput2(cols, "raw_html", raw_html.toUtf8().constData());
+    tcmapput2(cols, "raw_title", raw_title.toUtf8().constData());
+    tcmapput2(cols, "raw_content", raw_content.toUtf8().constData());
+    tcmapput2(cols, "raw_content_md5", raw_content_md5.toUtf8().constData());
 
-    char crawl_level_str[40]; //enough for 64bit?
-    sprintf(crawl_level_str, "%d", crawl_level);
-    tcmapput2(cols, "crawl_level", crawl_level_str);
-    tcmapput2(cols, "anchor_text", anchor_text.c_str());
-    tcmapput2(cols, "raw_html", raw_html.c_str());
-    tcmapput2(cols, "raw_title", raw_title.c_str());
-    tcmapput2(cols, "raw_content", raw_content.c_str());
-
-    char d_time[40]; //enough for 64bit?
-    sprintf(d_time, "%d", download_time);
-
-    char last_time[40]; //enough for 64bit?
-    sprintf(last_time, "%d", last_modified);
-    char lo_time[40]; //enough for 64bit?
-    sprintf(lo_time, "%d", loading_time);
-    tcmapput2(cols, "download_time", d_time);
-    tcmapput2(cols, "last_modified", last_time);
-    tcmapput2(cols, "loading_time", lo_time);
+    tcmapput2(cols, "download_time", QByteArray::number(download_time).constData());
+    tcmapput2(cols, "last_modified", QByteArray::number(last_modified).constData());
+    tcmapput2(cols, "loading_time", QByteArray::number(loading_time).constData());
 
     bool status = true;
-    if(!tcrdbtblput(record_db, url.c_str(), key_size, cols)){
+    if(!tcrdbtblput(record_db, url.toUtf8().constData(), key_size, cols)){
         int ecode = tcrdbecode(record_db);
-        log_error(logger, "store record put error: " << tcrdberrmsg(ecode));
+        fprintf(stderr, "store record put error: %s\n",  tcrdberrmsg(ecode));
         status = false;
     }
     tcmapdel(cols);
@@ -47,19 +44,21 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     return status;
 }
 
-bool QCrawlerDB::getUrlStatus(std::string url, QCrawlerUrl::UrlStatus *url_status) {
+bool QCrawlerDB::getUrlStatus(QString url, QCrawlerUrl::Status *url_status) {
     bool ret = false;
 
     int status = 0;
 
     char *value;
-    value = tcrdbget2(url_hash_db, url.c_str());
+    value = tcrdbget2(url_hash_db, url.toUtf8().constData());
     if(value){
         status = atoi(value);
-        if (QCrawlerUrl_UrlStatus_IsValid(status)) {
-            *url_status = (QCrawlerUrl::UrlStatus)status;
-            ret = true;
+        if (status < -5) {
+            status = -5;
         }
+
+        *url_status = (QCrawlerUrl::Status)status;
+        ret = true;
 
         free(value);
     } else {
@@ -68,7 +67,7 @@ bool QCrawlerDB::getUrlStatus(std::string url, QCrawlerUrl::UrlStatus *url_statu
             *url_status = QCrawlerUrl::NOT_EXIST;
             ret = true;
         } else {
-            log_error(logger, "get error: " << tcrdberrmsg(ecode));
+            fprintf(stderr, "get url status error: %s", tcrdberrmsg(ecode));
             ret = false;
         }
     }
@@ -76,15 +75,13 @@ bool QCrawlerDB::getUrlStatus(std::string url, QCrawlerUrl::UrlStatus *url_statu
     return ret;
 }
 
-bool QCrawlerDB::updateUrlStatus(const std::string &url, int status) {
-    log_debug(logger, "update status: " << status << " url: " <<  url);
-
+bool QCrawlerDB::updateUrlStatus(const QString &url, int status) {
     char status_str[40];
     sprintf(status_str, "%d", status);
 
-    if(!tcrdbput2(url_hash_db, url.c_str(), status_str)) {
+    if(!tcrdbput2(url_hash_db, url.toUtf8().constData(), status_str)) {
         int ecode = tcrdbecode(url_hash_db);
-        log_debug(logger, "update url status put error: " << tcrdberrmsg(ecode));
+        fprintf(stderr, "update url status put error: %s",  tcrdberrmsg(ecode));
         return false;
     }
 

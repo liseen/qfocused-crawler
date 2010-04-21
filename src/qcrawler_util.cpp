@@ -1,15 +1,17 @@
 #include "qcrawler_util.h"
 
 #include <sys/time.h>
+#include <QDebug>
 
-void debug_record(const QCrawlerRecord &rec)
+void debug_record(const QCrawlerRecord &)
 {
-    std::string str;
+}
 
-    google::protobuf::TextFormat::Printer printer;
-    printer.SetUseUtf8StringEscaping(true);
-    printer.PrintToString(rec, &str);
-    fprintf(stderr, "%s", str.c_str());
+QString md5_hash(const QString &data)
+{
+    QByteArray bytes = QCryptographicHash::hash (data.toUtf8(), QCryptographicHash::Md5);
+
+    return QString(bytes);
 }
 
 int get_current_time()

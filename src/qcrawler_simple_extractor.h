@@ -13,7 +13,6 @@ class QCrawlerSimpleExtractor  : public QCrawlerProcessor
 
 public:
     QCrawlerSimpleExtractor(QCrawlerDB * db, QCrawlerUrlQueue *queue) :QCrawlerProcessor(db, queue) {
-        logger = get_qcrawler_logger("simple_extractor");
 
     }
 
@@ -24,8 +23,7 @@ public:
     public std::string extractMainContent(const std::string& raw_content);
 
 public slots:
-    virtual void process(bool r, QCrawlerRecord &rec);
+    virtual int process(QCrawlerRecord &rec);
 
 private:
-    QCrawlerLogger logger;
 };

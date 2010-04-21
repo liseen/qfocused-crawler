@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QQueue>
 #include <QMap>
+#include <QByteArray>
 
 #include "qcrawler_config.h"
 
@@ -13,18 +14,16 @@ class QCrawlerUrlQueue : public QObject {
 
 public:
     QCrawlerUrlQueue() {
-        //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
-        // TODO config
         it = host_map.end();
     }
 
-    virtual void push(const std::string &host, const std::string &content);
-
-    virtual bool shift(std::string *str);
+    virtual void push(const QString &host, const QByteArray &content);
+    virtual bool shift(QByteArray *content);
 private:
-    QMap<std::string, QQueue<std::string> > host_map;
-    QMap<std::string, QQueue<std::string> >::iterator it;
-    QQueue<std::string> queue;
+    QMap< QString, QQueue<QByteArray> > host_map;
+    QMap< QString, QQueue<QByteArray> >::iterator it;
+    QMap< QString, QQueue<QByteArray> >::iterator last_it;
+    QQueue<QString> queue;
 };
 
 #endif

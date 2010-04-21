@@ -5,18 +5,13 @@
 #include <QWebElement>
 #include <QTime>
 
-void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
-    if (!r) {
-        return;
-    }
-
-    std::string url = rec.crawl_url().url();
+int QCrawlerKitParser::process(QCrawlerRecord &rec) {
+    QString url = rec.crawl_url().url();
     int crawl_level = rec.crawl_url().crawl_level();
 
     QTime begin_time;
     begin_time.start();
-    bool loadRet =  page->crawlerLoad(QUrl(QString::fromUtf8(url.c_str())));
-    log_debug(logger, "load status: " << loadRet);
+    bool loadRet =  page->crawlerLoad(QUrl(url));
 
     if (loadRet) {
         QWebFrame* frame = page->mainFrame();
@@ -24,13 +19,12 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
         QString raw_html = frame->toHtml();
         QString raw_content = frame->toPlainText();
 
-        rec.set_raw_title(frame->title().toUtf8().constData());
-        rec.set_raw_html(frame->toHtml().toUtf8().constData());
-        rec.set_raw_content(frame->toPlainText().toUtf8().constData());
+        rec.set_raw_title(frame->title());
+        rec.set_raw_html(frame->toHtml());
+        rec.set_raw_content(frame->toPlainText());
         rec.set_download_time(get_current_time());
         rec.set_loading_time(begin_time.elapsed());
 
-        //QWebElement document = frame->documentElement();
         // TODO get all links from
         // a => href area =>href base del=>cite
         // frame src longdesc
@@ -47,39 +41,60 @@ void QCrawlerKitParser::process(bool r, QCrawlerRecord &rec) {
                 l = link.attribute("src");
             }
 
+            QUrl qurl(l);
+            if (qurl.isRelative() && qurl.hasFragment()) {
+                l = qurl.toString(QUrl::StripTrailingSlash | QUrl::RemoveFragment);
+                qurl.clear();
+                qurl = QUrl(l);
+            }
+
+            if (qurl.isRelative()) {
+                qurl = frame->baseUrl().resolved(l);
+                l = qurl.toString(QUrl::StripTrailingSlash);
+            }
+
             if (dedupHash.contains(l)) {
                 continue;
             } else {
                 dedupHash.insert(l, 0);
             }
 
-            QUrl qurl(l);
-            if (qurl.isRelative()) {
-                qurl = frame->baseUrl().resolved(l);
+            QStringList extens = QCrawlerConfig::getInstance()->focus_filter_bin_extensions();
+            bool isBin = false;
+            foreach (QString ext, extens) {
+                if (l.endsWith("." + ext)) {
+                    isBin = true;
+                    break;
+                }
             }
 
-            if (!l.startsWith("#") && qurl.scheme().startsWith("http") && qurl.isValid()) {
+            if (isBin) { //we don't want crawl binnary file
+                continue;
+            }
+
+            if (qurl.isValid() && qurl.scheme().startsWith("http")) {
+                qDebug() << "new link: " << l;
                 QCrawlerUrl* sub_url = rec.add_raw_sub_links();
-                sub_url->set_url(qurl.toString().toUtf8().constData());
-                sub_url->set_anchor_text(link.toPlainText().toUtf8().constData());
-                sub_url->set_host(qurl.host().toUtf8().constData());
+                sub_url->set_url(qurl);
+                sub_url->set_anchor_text(link.toPlainText());
+                sub_url->set_url_md5(md5_hash(qurl.toString()));
+                sub_url->set_parent_url_md5(url);
                 sub_url->set_crawl_level(crawl_level + 1);
             }
         }
     } else {
-        QCrawlerUrl::UrlStatus url_status;
+        QCrawlerUrl::Status url_status;
         if (crawler_db->getUrlStatus(url, &url_status)) {
             if (url_status <= 0) {
                 crawler_db->updateUrlStatus(url, url_status - 1);
             } else {
                 crawler_db->updateUrlStatus(url, -1);
             }
-        } else {
-            loadRet = false;
         }
     }
 
-    log_debug(logger, "process status: " << loadRet);
     emit processFinished(loadRet, rec);
+
+    return 0;
 }
 

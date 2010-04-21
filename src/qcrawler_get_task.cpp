@@ -4,11 +4,7 @@
 //#include "unistd.h"
 #include <iostream>
 
-void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
-    if (!r) {
-        return;
-    }
-
+int QCrawlerGetTask::process(QCrawlerRecord &rec) {
     static int first_time = true;
 
     if (first_time) {
@@ -19,65 +15,50 @@ void QCrawlerGetTask::process(bool r, QCrawlerRecord &rec) {
             QUrl qurl(QString::fromUtf8(url.c_str()));
             if (qurl.isValid()) {
                 QCrawlerUrl c_url;
-                std::string host = qurl.host().toUtf8().constData();
+                QString host = qurl.host();
                 if (host.size() < 1) {
                     continue;
                 }
 
-                c_url.set_url(qurl.toString().toUtf8().constData());
+                c_url.set_url(qurl.toString());
                 c_url.set_crawl_level(0);
-                c_url.set_host(host);
                 c_url.set_crawl_type(QCrawlerUrl::HOST_RESTRICTED);
-                //c_url.set_crawl_type(QCrawlerUrl::UPDATE);
-                std::string s_str;
-                c_url.SerializeToString(&s_str);
-                url_queue->push(host, s_str);
+                QByteArray bytes;
+                c_url.serialize_to_bytes(bytes);
+                url_queue->push(host, bytes);
             }
         }
     }
 
-    QCrawlerUrl* crawl_url = rec.mutable_crawl_url();
-    std::string serial_str;
-    if (url_queue->shift(&serial_str)) {
-        crawl_url->ParseFromString(serial_str);
+    QCrawlerUrl& crawl_url = rec.crawl_url();
+
+    bool valid = false;
+    QByteArray serial_bytes;
+    if (url_queue->shift(&serial_bytes)) {
+        valid = crawl_url.parse_from_bytes(serial_bytes);
     } else {
-        log_info(logger, "no url found in url queue");
-        QCrawlerConfig* crawler_config =  QCrawlerConfig::getInstance();
-        if (crawler_config->quit_on_no_url_found()) {
+        fprintf(stdout, "no url found in url queue\n");
+        if (QCrawlerConfig::getInstance()->quit_on_no_url_found()) {
             exit(2);
         } else {
             QCrawlerSleep::sleep(1);
         }
 
-        return;
+        valid = false;
     }
 
     // enabled freq control
     if (QCrawlerConfig::getInstance()->need_freq_control()) {
-        while (!freq_control->canCrawl(crawl_url->host())) {
+        while (!freq_control->canCrawl(crawl_url.host())) {
             QCrawlerSleep::sleep(1);
         }
     }
 
-    QCrawlerUrl::UrlStatus url_status;
-    bool get_ok = crawler_db->getUrlStatus(crawl_url->url(), &url_status);
-
-    std::cout << "host: " << crawl_url->host() << " url: " << crawl_url->url() << " status: " << url_status << std::endl;
-
-    bool valid = true;
-    if (!get_ok) {
-        valid = false;
-    } else if (url_status == QCrawlerUrl::NOT_EXIST) {
-        crawler_db->updateUrlStatus(crawl_url->url(), QCrawlerUrl::NOT_CRAWLED);
-        valid = true;
-    } else if (url_status > 0 && crawl_url->crawl_type() != QCrawlerUrl::UPDATE) { //
-        valid = false;
-    } else if (url_status < -3) {
-        valid = false;
-    } else {
-
-    }
-
-    log_debug(logger, "process status " << valid);
     emit processFinished(valid, rec);
+
+    if (valid) {
+        return 0;
+    } else {
+        return 1;
+    }
 }

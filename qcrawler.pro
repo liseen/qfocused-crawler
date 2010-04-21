@@ -16,7 +16,8 @@ SOURCES +=\
     src/qcrawler_focus_filter.cpp\
     src/qcrawler_config.cpp\
     src/qcrawler_freq_control.cpp\
-    ./src/qcrawler_record.pb.cc
+    src/qcrawler_url.cpp\
+    src/qcrawler_record.cpp
 
 HEADERS +=\
     src/qcrawler_storage_record.h\
@@ -32,9 +33,10 @@ HEADERS +=\
     src/qcrawler_get_task.h\
     src/qcrawler.h\
     src/qcrawler_eventloop.h\
-    src/qcrawler_record.pb.h\
     src/qcrawler_focus_filter.h\
     src/qcrawler_sleep.h\
+    src/qcrawler_url.h\
+    src/qcrawler_record.h\
     src/qcrawler_common.h
 
 INCLUDEPATH  = /opt/qcrawler-thirdparty/include

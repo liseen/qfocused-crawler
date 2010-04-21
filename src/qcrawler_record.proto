@@ -16,7 +16,7 @@ message QCrawlerUrl {
     };
 
     enum UrlStatus {
-        NOT_EXIST = -100;
+        NOT_EXIST = 100;
         NOT_CRAWLED = 0;
 
         CRAWLED_OK = 1;

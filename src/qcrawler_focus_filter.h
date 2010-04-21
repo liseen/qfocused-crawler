@@ -9,7 +9,6 @@
 
 #include "qcrawler_processor.h"
 
-#define MAX_CRAWL_LEVEL_DEFAULT 100
 
 class QCrawlerFocusFilter : public QCrawlerProcessor
 {
@@ -17,10 +16,6 @@ class QCrawlerFocusFilter : public QCrawlerProcessor
 
 public:
     QCrawlerFocusFilter(QCrawlerDB * db, QCrawlerUrlQueue *queue) :QCrawlerProcessor(db, queue) {
-        logger = get_qcrawler_logger("focus_filter");
-        //QCrawlerConfig *crawler_config = QCrawlerConfig::getInstance();
-        // TODO config
-
     }
 
     virtual ~QCrawlerFocusFilter() {
@@ -30,13 +25,12 @@ public:
     virtual bool contentFilter(QCrawlerRecord &rec);
     virtual bool urlFilter(QCrawlerRecord &rec);
 
-    bool insertFocusedUrls(const QCrawlerRecord &rec);
+    bool insertFocusedUrls(QCrawlerRecord &rec);
 
 public slots:
-    virtual void process(bool r, QCrawlerRecord &rec);
+    virtual int process(QCrawlerRecord &rec);
 
 private:
-    QCrawlerLogger logger;
 };
 
 #endif

@@ -1,15 +1,13 @@
 #include "qcrawler_storage_record.h"
 
 
-void QCrawlerStorageRecord::process(bool r, QCrawlerRecord &rec) {
-    if (!r) {
-        return;
+int QCrawlerStorageRecord::process(QCrawlerRecord &rec) {
+    bool r = crawler_db->storeRecord(rec);
+    if (r) {
+        return 0;
+    } else {
+        return -1;
     }
-
-    bool store_ret = crawler_db->storeRecord(rec);
-
-    log_debug(logger, "process status: " << store_ret);
-    emit processFinished(store_ret, rec);
 }
 
 

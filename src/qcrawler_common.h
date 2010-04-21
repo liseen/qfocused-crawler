@@ -1,16 +1,17 @@
 #ifndef QCRAWLER_COMMON_H
 #define QCRAWLER_COMMON_H
 
-#include "qcrawler_record.pb.h"
+#include "qcrawler_record.h"
 
+#define MAX_CRAWL_LEVEL 10000
+#define QCRAWLER_VERSION 0.0.2
+/*
 #include "log4cxx/logger.h"
 #include "log4cxx/basicconfigurator.h"
 #include "log4cxx/propertyconfigurator.h"
 #include "log4cxx/helpers/exception.h"
 #include <log4cxx/fileappender.h>
 #include <log4cxx/simplelayout.h>
-
-#define QCRAWLER_VERSION 0.0.1
 
 #define log_trace LOG4CXX_TRACE
 #define log_debug LOG4CXX_DEBUG
@@ -23,5 +24,5 @@
 #define get_qcrawler_logger(x) log4cxx::Logger::getLogger(x)
 
 void  GLOBAL_INIT_LOGGER(const std::string &file_name);
-
+*/
 #endif

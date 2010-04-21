@@ -1,5 +1,8 @@
 #include "qcrawler_config.h"
 
+#include <QRegExp>
+#include <QStringList>
+
 QCrawlerConfig* QCrawlerConfig::config = NULL;
 
 QCrawlerConfig* QCrawlerConfig::getInstance()
@@ -12,9 +15,9 @@ QCrawlerConfig* QCrawlerConfig::getInstance()
     }
 }
 
-bool QCrawlerConfig::init(const std::string &conf_file)
+bool QCrawlerConfig::init(const QString &conf_file)
 {
-    settings = new QSettings(QString::fromUtf8(conf_file.c_str()), QSettings::IniFormat);
+    settings = new QSettings(conf_file, QSettings::IniFormat);
     if (QSettings::NoError == settings->status()) {
         return true;
     }
@@ -22,13 +25,13 @@ bool QCrawlerConfig::init(const std::string &conf_file)
     return false;
 }
 
-std::string QCrawlerConfig::user_agent()
+QString QCrawlerConfig::user_agent()
 {
     QString user_agent = settings->value("user_agent").toString();
     if (user_agent.isEmpty()) {
         return "user_agent";
     }
-    return user_agent.toUtf8().constData();
+    return user_agent;
 }
 
 bool QCrawlerConfig::quit_on_no_url_found()
@@ -73,7 +76,17 @@ bool QCrawlerConfig::need_freq_control()
     return (bool)need.toInt();
 }
 
-std::string QCrawlerConfig::url_hash_db_host() {
+bool QCrawlerConfig::enable_central_queue()
+{
+    QString e = settings->value("enable_central_queue").toString();
+
+    if (e.isEmpty()) {
+        return true;
+    }
+    return (bool)e.toInt();
+}
+
+QString QCrawlerConfig::url_hash_db_host() {
     settings->beginGroup("url_hash");
     QString host = settings->value("host").toString();
     settings->endGroup();
@@ -81,7 +94,7 @@ std::string QCrawlerConfig::url_hash_db_host() {
     if (host.isEmpty()) {
         return "localhost";
     }
-    return host.toUtf8().constData();
+    return host;
 }
 
 int QCrawlerConfig::url_hash_db_port() {
@@ -97,7 +110,7 @@ int QCrawlerConfig::url_hash_db_port() {
 
 
 // cassandra or tt?  default is tt
-std::string QCrawlerConfig::record_db_type() {
+QString QCrawlerConfig::record_db_type() {
     settings->beginGroup("record_db");
     QString type = settings->value("type").toString();
     settings->endGroup();
@@ -105,10 +118,10 @@ std::string QCrawlerConfig::record_db_type() {
     if (type.isEmpty()) {
         return "tt";
     }
-    return type.toUtf8().constData();
+    return type;
 }
 
-std::string QCrawlerConfig::record_db_host() {
+QString QCrawlerConfig::record_db_host() {
     settings->beginGroup("record_db");
     QString host = settings->value("host").toString();
     settings->endGroup();
@@ -116,7 +129,7 @@ std::string QCrawlerConfig::record_db_host() {
     if (host.isEmpty()) {
         return "localhost";
     }
-    return host.toUtf8().constData();
+    return host;
 }
 
 int QCrawlerConfig::record_db_port() {
@@ -130,7 +143,7 @@ int QCrawlerConfig::record_db_port() {
     return port.toInt();
 }
 
-std::string QCrawlerConfig::url_queue_server() {
+QString QCrawlerConfig::url_queue_server() {
     settings->beginGroup("url_queue");
     QString host = settings->value("server").toString();
     settings->endGroup();
@@ -138,10 +151,10 @@ std::string QCrawlerConfig::url_queue_server() {
     if (host.isEmpty()) {
         return "localhost:19854";
     }
-    return host.toUtf8().constData();
+    return host;
 }
 
-std::string QCrawlerConfig::freq_control_memcached_servers() {
+QString QCrawlerConfig::freq_control_memcached_servers() {
     settings->beginGroup("freq_control");
     QString servers = settings->value("memcached_servers").toString();
     settings->endGroup();
@@ -149,7 +162,7 @@ std::string QCrawlerConfig::freq_control_memcached_servers() {
     if (servers.isEmpty()) {
         return "localhost:11211";
     }
-    return servers.toUtf8().constData();
+    return servers;
 }
 
 int QCrawlerConfig::freq_control_cycle_time() {
@@ -163,3 +176,14 @@ int QCrawlerConfig::freq_control_cycle_time() {
     return cycle_time.toInt();
 }
 
+QStringList QCrawlerConfig::focus_filter_bin_extensions()
+{
+    settings->beginGroup("focus_fitler");
+    QString exts = settings->value("bin_extension").toString();
+    settings->endGroup();
+
+    if (exts.isEmpty()) {
+        return QStringList();
+    }
+    return exts.split(QRegExp("\\s+"));
+}

@@ -1,32 +1,25 @@
 #include "qcrawler_focus_filter.h"
 
-void QCrawlerFocusFilter::process(bool r, QCrawlerRecord &rec) {
-    if (!r) {
-        return;
-    }
+int QCrawlerFocusFilter::process(QCrawlerRecord &rec) {
 
-    std::string url = rec.crawl_url().url();
+    QString url = rec.crawl_url().url();
+    QCrawlerUrl::Status url_status;
 
-    QCrawlerUrl::UrlStatus url_status;
-
-    if (contentFilter(rec)) {
-        url_status = QCrawlerUrl::CRAWLED_OK;
-        crawler_db->updateUrlStatus(url, url_status);
-    } else {
+    if (! contentFilter(rec)) {
         url_status = QCrawlerUrl::NOT_NEED_CRAWL;
 
         crawler_db->updateUrlStatus(url, url_status);
-        // wo don't need check sub url here?
         emit processFinished(false, rec);
+        return 1;
     }
 
-    if (urlFilter(rec)) {
-
-    }
+    urlFilter(rec);
 
     insertFocusedUrls(rec);
 
     emit processFinished(true, rec);
+
+    return 0;
 }
 
 
@@ -39,17 +32,17 @@ bool QCrawlerFocusFilter::contentFilter(QCrawlerRecord &) {
 
 bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
     QCrawlerUrl::CrawlType crawl_type = rec.crawl_url().crawl_type();
-    std::string host = rec.crawl_url().host();
-    int size =rec.raw_sub_links_size();
+    QString host = rec.crawl_url().host();
+    int size =rec.raw_sub_links().size();
     for (int i = 0; i < size; i++) {
-        std::string sub_url = rec.raw_sub_links(i).url();
-        std::string sub_host = rec.raw_sub_links(i).host();
+        QString sub_url = rec.raw_sub_links(i).url();
+        QString sub_host = rec.raw_sub_links(i).host();
         int sub_crawl_level = rec.raw_sub_links(i).crawl_level();
 
         // TODO some url filter alogrithm
-        QCrawlerUrl::UrlStatus url_status;
+        QCrawlerUrl::Status url_status;
         if (crawler_db->getUrlStatus(sub_url, &url_status)) {
-            if (sub_crawl_level > MAX_CRAWL_LEVEL_DEFAULT) {
+            if (sub_crawl_level > MAX_CRAWL_LEVEL) {
                 continue;
             }
 
@@ -59,15 +52,10 @@ bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
                 }
 
                 // end with host
-                int sub_host_size = sub_host.size();
-                int host_size = host.size();
-                if (sub_host_size >= host_size &&
-                        sub_host.substr(sub_host_size - host_size, host_size) == host) {
-                    QCrawlerUrl* focus_url = rec.add_focused_links();
-                    focus_url->CopyFrom(rec.raw_sub_links(i));
-
-                    crawler_db->updateUrlStatus(sub_url, QCrawlerUrl::NOT_CRAWLED);
-                    log_debug(logger, "added focus url:" << sub_url);
+                if (sub_host.endsWith(host)) {
+                    qDebug() << "new focus url: " << sub_url;
+                    rec.focused_links().append(rec.raw_sub_links(i));
+                    rec.focused_links().last().set_crawl_type(crawl_type);
                 }
             } else if (crawl_type == QCrawlerUrl::UPDATE) { // update , we don't extract sub links
                 break;
@@ -83,19 +71,17 @@ bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
 }
 
 
-bool QCrawlerFocusFilter::insertFocusedUrls(const QCrawlerRecord &rec) {
-    // step 1: insert url to hash database
-    //
-    // enter url queue
-    int size =rec.focused_links_size();
+bool QCrawlerFocusFilter::insertFocusedUrls(QCrawlerRecord &rec) {
+    int size =rec.focused_links().size();
     for (int i = 0; i < size; i++) {
-        std::string url = rec.focused_links(i).url();
+        QString url = rec.focused_links(i).url();
         crawler_db->updateUrlStatus(url, QCrawlerUrl::NOT_CRAWLED);
-
-        std::string serial_str;
-        rec.focused_links(i).SerializeToString(&serial_str);
-
-        url_queue->push(rec.focused_links(i).host(), serial_str);
+        QByteArray bytes;
+        if (rec.focused_links(i).serialize_to_bytes(bytes)) {
+            url_queue->push(rec.focused_links(i).host(), bytes);
+        } else {
+            //TODO log
+        }
     }
 
     return true;
