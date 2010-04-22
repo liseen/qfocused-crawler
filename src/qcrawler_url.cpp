@@ -29,6 +29,8 @@ QCrawlerUrl& QCrawlerUrl::operator=(const QCrawlerUrl& other)
         QVariant value = other.property(name);
         this->setProperty(name, value);
     }
+
+    return *this;
 }
 
 QString QCrawlerUrl::url() const
