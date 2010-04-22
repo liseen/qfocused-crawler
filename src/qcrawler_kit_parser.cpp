@@ -73,7 +73,6 @@ int QCrawlerKitParser::process(QCrawlerRecord &rec) {
             }
 
             if (qurl.isValid() && qurl.scheme().startsWith("http")) {
-                qDebug() << "new link: " << l;
                 QCrawlerUrl* sub_url = rec.add_raw_sub_links();
                 sub_url->set_url(qurl);
                 sub_url->set_anchor_text(link.toPlainText());
@@ -83,13 +82,11 @@ int QCrawlerKitParser::process(QCrawlerRecord &rec) {
             }
         }
     } else {
-        QCrawlerUrl::Status url_status;
-        if (crawler_db->getUrlStatus(url, &url_status)) {
-            if (url_status <= 0) {
-                crawler_db->updateUrlStatus(url, url_status - 1);
-            } else {
-                crawler_db->updateUrlStatus(url, -1);
-            }
+        QCrawlerUrl::Status url_status = rec.crawl_url().status();
+        if (url_status <= 0) {
+            crawler_db->updateUrlStatus(url, url_status - 1);
+        } else {
+            crawler_db->updateUrlStatus(url, -1);
         }
     }
 

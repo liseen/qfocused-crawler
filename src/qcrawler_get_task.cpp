@@ -23,6 +23,7 @@ int QCrawlerGetTask::process(QCrawlerRecord &rec) {
                 c_url.set_url(qurl.toString());
                 c_url.set_crawl_level(0);
                 c_url.set_crawl_type(QCrawlerUrl::HOST_RESTRICTED);
+                c_url.set_status(QCrawlerUrl::NOT_EXIST);
                 QByteArray bytes;
                 c_url.serialize_to_bytes(bytes);
                 url_queue->push(host, bytes);

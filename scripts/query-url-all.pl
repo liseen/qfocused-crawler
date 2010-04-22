@@ -18,8 +18,11 @@ if(!$rdb->open("localhost", 1979)){
 $rdb->iterinit();
 while(defined(my $key = $rdb->iternext())){
     my $value = $rdb->get($key);
-    if(defined($value)){
-        printf("%s\t%s\n", $key, $value);
+    #if(defined($value)) {
+    #    printf("%s\t%s\n", $key, $value);
+    #}
+    if ($value eq '0') {
+        print $key . "\n";
     }
 }
 

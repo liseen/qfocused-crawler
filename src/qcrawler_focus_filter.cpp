@@ -53,9 +53,11 @@ bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
 
                 // end with host
                 if (sub_host.endsWith(host)) {
-                    qDebug() << "new focus url: " << sub_url;
+                    //qDebug() << "new focus url: " << sub_url;
                     rec.focused_links().append(rec.raw_sub_links(i));
+
                     rec.focused_links().last().set_crawl_type(crawl_type);
+                    rec.focused_links().last().set_status(url_status);
                 }
             } else if (crawl_type == QCrawlerUrl::UPDATE) { // update , we don't extract sub links
                 break;
@@ -75,7 +77,13 @@ bool QCrawlerFocusFilter::insertFocusedUrls(QCrawlerRecord &rec) {
     int size =rec.focused_links().size();
     for (int i = 0; i < size; i++) {
         QString url = rec.focused_links(i).url();
-        crawler_db->updateUrlStatus(url, QCrawlerUrl::NOT_CRAWLED);
+        QCrawlerUrl::Status url_status = rec.focused_links(i).status();
+
+        if (url_status == QCrawlerUrl::NOT_EXIST) {
+            crawler_db->updateUrlStatus(url, QCrawlerUrl::NOT_CRAWLED);
+            rec.focused_links(i).set_status(QCrawlerUrl::NOT_CRAWLED);
+        }
+
         QByteArray bytes;
         if (rec.focused_links(i).serialize_to_bytes(bytes)) {
             url_queue->push(rec.focused_links(i).host(), bytes);

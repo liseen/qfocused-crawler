@@ -4,21 +4,28 @@
 
 void QCrawler::start() {
     int proc_size = processors.size();
-    int ret;
     while (true) {
         QCrawlerRecord rec;
 
-        for (int i = 0; i < proc_size; i++) {
-            ret = processors[i]->process(rec);
-            qDebug() << QDateTime::currentDateTime().toString("yyyy-dd-mm hh:mm:ss")
-                     << processors[i]->objectName() << "url: " << rec.crawl_url().url() << " ret: " << ret;
-            if (ret > 0) {
-               // log
-                break;
-            } else if (ret < 0) {
+        int task_ret = get_task->process(rec);
+
+        if (task_ret == 0) {
+            for (int i = 0; i < proc_size; i++) {
+                int ret = processors[i]->process(rec);
+                qDebug() << QDateTime::currentDateTime().toString("yyyy-dd-mm hh:mm:ss")
+                        << processors[i]->objectName() << "url: " << rec.crawl_url().url() << " ret: " << ret;
+                if (ret > 0) {
                 // log
-                exit(1);
+                    break;
+                } else if (ret < 0) {
+                    // log
+                    exit(1);
+                }
             }
+        } else if (task_ret > 0) {
+            // none op
+        } else {
+            exit(1);
         }
     }
 }
@@ -45,7 +52,6 @@ QCrawler::QCrawler(){
     storage_record = new QCrawlerStorageRecord(db, url_queue);
     storage_record->setObjectName("storage");
 
-    processors.append(get_task);
     processors.append(parser);
     processors.append(focus_filter);
     processors.append(storage_record);
