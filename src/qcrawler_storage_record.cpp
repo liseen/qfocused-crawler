@@ -2,12 +2,14 @@
 
 
 int QCrawlerStorageRecord::process(QCrawlerRecord &rec) {
-    bool r = crawler_db->storeRecord(rec);
-    if (r) {
-        return 0;
-    } else {
+    if (! crawler_db->updateUrlStatus(rec.crawl_url().url(), QCrawlerUrl::CRAWLED_OK) ) {
         return -1;
     }
+    if (!crawler_db->storeRecord(rec)) {
+        return -1;
+    }
+
+    return 0;
 }
 
 

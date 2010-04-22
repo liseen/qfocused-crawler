@@ -21,7 +21,7 @@ while(defined(my $key = $rdb->iternext())){
     #if(defined($value)) {
     #    printf("%s\t%s\n", $key, $value);
     #}
-    if ($value eq '0') {
+    if ($value eq '1') {
         print $key . "\n";
     }
 }
