@@ -3,6 +3,7 @@
 
 bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     QString url = rec.crawl_url().url();
+    QString host = rec.crawl_url().host();
     QString url_md5 = md5_hash(url);
     QString parent_url_md5 = rec.crawl_url().parent_url_md5();
 
@@ -21,6 +22,7 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
 
     TCMAP *cols = tcmapnew();
     tcmapput2(cols, "url", url.toUtf8().constData());
+    tcmapput2(cols, "host", host.toUtf8().constData());
     tcmapput2(cols, "url_md5", url_md5.toUtf8().constData());
     tcmapput2(cols, "parent_url_md5", parent_url_md5.toUtf8().constData());
     tcmapput2(cols, "crawl_level", QByteArray::number(crawl_level).constData());
