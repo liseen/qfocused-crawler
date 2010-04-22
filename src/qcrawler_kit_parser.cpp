@@ -92,6 +92,10 @@ int QCrawlerKitParser::process(QCrawlerRecord &rec) {
 
     emit processFinished(loadRet, rec);
 
-    return 0;
+    if (loadRet) {
+        return 0;
+    } else  {
+        return 1;
+    }
 }
 
