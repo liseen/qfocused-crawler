@@ -3,8 +3,9 @@
 
 bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     QString url = rec.crawl_url().url();
-    QString url_md5 = rec.crawl_url().url_md5();
+    QString url_md5 = md5_hash(url);
     QString parent_url_md5 = rec.crawl_url().parent_url_md5();
+
     int crawl_level = rec.crawl_url().crawl_level();
     QString anchor_text = rec.crawl_url().anchor_text();
     QString raw_html = rec.raw_html();

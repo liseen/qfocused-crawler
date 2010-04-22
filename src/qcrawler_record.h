@@ -21,7 +21,12 @@ class QCrawlerRecord : public QObject
     Q_PROPERTY(int last_modified READ last_modified WRITE set_last_modified)
 
 public:
-    QCrawlerRecord() {}
+    QCrawlerRecord() {
+        m_download_time = 0;
+        m_loading_time = 0;
+        m_last_modified = 0;
+    }
+
     ~QCrawlerRecord() {}
 
     QString raw_html() const;

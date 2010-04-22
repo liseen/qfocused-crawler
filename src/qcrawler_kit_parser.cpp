@@ -76,8 +76,8 @@ int QCrawlerKitParser::process(QCrawlerRecord &rec) {
                 QCrawlerUrl* sub_url = rec.add_raw_sub_links();
                 sub_url->set_url(qurl);
                 sub_url->set_anchor_text(link.toPlainText());
-                sub_url->set_url_md5(md5_hash(qurl.toString()));
-                sub_url->set_parent_url_md5(url);
+                sub_url->set_url_md5(md5_hash(l));
+                sub_url->set_parent_url_md5(md5_hash(url));
                 sub_url->set_crawl_level(crawl_level + 1);
             }
         }
