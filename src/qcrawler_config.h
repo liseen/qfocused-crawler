@@ -24,6 +24,7 @@ public:
     bool auto_load_image();
     bool need_freq_control();
     bool enable_central_queue();
+    bool enable_debug();
 
     QString url_hash_db_host();
     int url_hash_db_port();

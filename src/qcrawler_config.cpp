@@ -86,6 +86,16 @@ bool QCrawlerConfig::enable_central_queue()
     return (bool)e.toInt();
 }
 
+bool QCrawlerConfig::enable_debug()
+{
+    QString e = settings->value("enable_debug").toString();
+
+    if (e.isEmpty()) {
+        return false;
+    }
+    return (bool)e.toInt();
+}
+
 QString QCrawlerConfig::url_hash_db_host() {
     settings->beginGroup("url_hash");
     QString host = settings->value("host").toString();

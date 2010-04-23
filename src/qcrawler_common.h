@@ -4,6 +4,7 @@
 #include "qcrawler_record.h"
 
 #define MAX_CRAWL_LEVEL 10000
+#define MAX_URL_LENGTH 512
 #define QCRAWLER_VERSION 0.0.2
 /*
 #include "log4cxx/logger.h"

@@ -72,7 +72,7 @@ int QCrawlerKitParser::process(QCrawlerRecord &rec) {
                 continue;
             }
 
-            if (qurl.isValid() && qurl.scheme().startsWith("http")) {
+            if (l.size() < MAX_URL_LENGTH && qurl.isValid() && qurl.scheme().startsWith("http")) {
                 QCrawlerUrl* sub_url = rec.add_raw_sub_links();
                 sub_url->set_url(qurl);
                 sub_url->set_anchor_text(link.toPlainText());

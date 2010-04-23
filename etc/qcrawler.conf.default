@@ -6,6 +6,7 @@ quit_on_no_url_found=0
 proxy_enabled=0
 need_freq_control=0
 enable_central_queue=1
+enable_debug=0
 
 [log]
 

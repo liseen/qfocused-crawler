@@ -17,6 +17,7 @@ SOURCES +=\
     src/qcrawler_config.cpp\
     src/qcrawler_freq_control.cpp\
     src/qcrawler_url.cpp\
+    src/qcrawler_simple_extractor.cpp\
     src/qcrawler_record.cpp
 
 HEADERS +=\
@@ -37,6 +38,7 @@ HEADERS +=\
     src/qcrawler_sleep.h\
     src/qcrawler_url.h\
     src/qcrawler_record.h\
+    src/qcrawler_simple_extractor.h\
     src/qcrawler_common.h
 
 INCLUDEPATH  = /opt/qcrawler-thirdparty/include

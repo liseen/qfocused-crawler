@@ -29,8 +29,11 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     tcmapput2(cols, "anchor_text", anchor_text.toUtf8().constData());
     tcmapput2(cols, "raw_html", raw_html.toUtf8().constData());
     tcmapput2(cols, "raw_title", raw_title.toUtf8().constData());
-    tcmapput2(cols, "raw_content", raw_content.toUtf8().constData());
-    tcmapput2(cols, "raw_content_md5", raw_content_md5.toUtf8().constData());
+    tcmapput2(cols, "raw_content", rec.raw_content().toUtf8().constData());
+    tcmapput2(cols, "raw_content_md5", md5_hash(rec.raw_content()).toUtf8().constData());
+
+    tcmapput2(cols, "title", rec.title().toUtf8().constData());
+    tcmapput2(cols, "content", rec.content().toUtf8().constData());
 
     tcmapput2(cols, "download_time", QByteArray::number(download_time).constData());
     tcmapput2(cols, "last_modified", QByteArray::number(last_modified).constData());

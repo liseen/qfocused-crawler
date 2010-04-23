@@ -15,9 +15,12 @@
 #include "qcrawler_focus_filter.h"
 #include "qcrawler_storage_record.h"
 #include "qcrawler_central_queue.h"
+#include "qcrawler_simple_extractor.h"
+
 /**
  * crawler
  */
+
 class QCrawler : public QObject
 {
     Q_OBJECT
@@ -38,6 +41,7 @@ private:
     QCrawlerFocusFilter* focus_filter;
     QCrawlerStorageRecord* storage_record;
 
+    QCrawlerSimpleExtractor* simple_extractor;
 
     QVector<QCrawlerProcessor*> processors;
 };

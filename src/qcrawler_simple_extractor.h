@@ -20,10 +20,13 @@ public:
     }
 
 
-    public std::string extractMainContent(const std::string& raw_content);
+    QString extractTitle(const QString &raw_title);
+    QString extractMainContent(const QString &raw_content);
 
 public slots:
     virtual int process(QCrawlerRecord &rec);
 
 private:
 };
+
+#endif

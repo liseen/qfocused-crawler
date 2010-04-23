@@ -45,15 +45,22 @@ QCrawler::QCrawler(){
 
     get_task = new QCrawlerGetTask(db, url_queue, freq_control);
     get_task->setObjectName("task");
+
     parser = new QCrawlerKitParser(db, url_queue);
     parser->setObjectName("parser");
+    processors.append(parser);
+
+
     focus_filter = new QCrawlerFocusFilter(db, url_queue);
     focus_filter->setObjectName("filter");
+    processors.append(focus_filter);
+
+    simple_extractor = new QCrawlerSimpleExtractor(db, url_queue);
+    simple_extractor->setObjectName("extractor");
+    processors.append(simple_extractor);
+
     storage_record = new QCrawlerStorageRecord(db, url_queue);
     storage_record->setObjectName("storage");
-
-    processors.append(parser);
-    processors.append(focus_filter);
     processors.append(storage_record);
 }
 
