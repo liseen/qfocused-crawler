@@ -87,7 +87,7 @@ bool QCrawlerDB::updateUrlStatus(const QString &url, int status) {
 
     if(!tcrdbput2(url_hash_db, url.toUtf8().constData(), status_str)) {
         int ecode = tcrdbecode(url_hash_db);
-        fprintf(stderr, "update url status put error: %s",  tcrdberrmsg(ecode));
+        fprintf(stderr, "update url status put error: %s\n",  tcrdberrmsg(ecode));
         return false;
     }
 

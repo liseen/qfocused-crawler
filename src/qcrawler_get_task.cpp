@@ -38,7 +38,6 @@ int QCrawlerGetTask::process(QCrawlerRecord &rec) {
     if (url_queue->shift(&serial_bytes)) {
         valid = crawl_url.parse_from_bytes(serial_bytes);
     } else {
-        fprintf(stdout, "no url found in url queue\n");
         if (QCrawlerConfig::getInstance()->quit_on_no_url_found()) {
             exit(2);
         } else {

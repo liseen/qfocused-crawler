@@ -7,35 +7,25 @@ void QCrawler::start() {
     while (true) {
         QCrawlerRecord rec;
 
-        int task_ret = get_task->process(rec);
+        for (int i = 0; i < proc_size; i++) {
+            int ret = processors[i]->process(rec);
 
-        if (task_ret == 0) {
-            for (int i = 0; i < proc_size; i++) {
-                int ret = processors[i]->process(rec);
-                qDebug() << QDateTime::currentDateTime().toString("yyyy-dd-mm hh:mm:ss")
-                        << processors[i]->objectName() << "url: " << rec.crawl_url().url() << " ret: " << ret;
-                if (ret > 0) {
+            fprintf(stdout, "%s %10s %2d %s\n", QDateTime::currentDateTime().toString("yyyy-dd-mm hh:mm:ss").toUtf8().constData(), processors[i]->objectName().toUtf8().constData(), ret, rec.crawl_url().url().toUtf8().constData());
+            if (ret > 0) {
+            // log
+                break;
+            } else if (ret < 0) {
                 // log
-                    break;
-                } else if (ret < 0) {
-                    // log
-                    exit(1);
-                }
+                exit(1);
             }
-        } else if (task_ret > 0) {
-            // none op
-        } else {
-            exit(1);
         }
     }
 }
 
 QCrawler::QCrawler(){
-
     db = new QCrawlerDB();
 
     if (QCrawlerConfig::getInstance()->enable_central_queue()) {
-
         url_queue = new QCrawlerCentralQueue();
     } else {
         url_queue = new QCrawlerUrlQueue();
@@ -45,6 +35,7 @@ QCrawler::QCrawler(){
 
     get_task = new QCrawlerGetTask(db, url_queue, freq_control);
     get_task->setObjectName("task");
+    processors.append(get_task);
 
     parser = new QCrawlerKitParser(db, url_queue);
     parser->setObjectName("parser");

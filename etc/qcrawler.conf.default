@@ -24,7 +24,7 @@ host=localhost
 port=1978
 
 [url_queue]
-server=localhost:19854
+server=localhost:1112
 
 [freq_control]
 memcached_servers=localhost:11211
