@@ -16,15 +16,15 @@ port=
 
 [url_hash]
 host=localhost
-port=1979
+port=19850
 
 [record_db]
 type=tt
 host=localhost
-port=1978
+port=19851
 
 [url_queue]
-server=localhost:1112
+server=localhost:19854
 
 [freq_control]
 memcached_servers=localhost:11211

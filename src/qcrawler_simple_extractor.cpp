@@ -9,7 +9,9 @@ QString QCrawlerSimpleExtractor::extractTitle(const QString &raw_title)
         int max_len = -1;
         int max_idx = -1;
         for ( int i = 0; i < tl.size(); i++) {
-            if (tl.at(i).size() > max_len && !tl.at(i).endsWith("网")) {
+            QString cad_title = tl.at(i);
+            cad_title = cad_title.trimmed();
+            if (cad_title.size() > max_len && !cad_title.endsWith(QString::fromUtf8("网"))) {
                 max_len = tl.at(i).size();
                 max_idx = i;
             }
@@ -33,12 +35,13 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
     QString main_content;
     QRegExp reg("(?:、|，|。|？|,|。)");
     QStringList list = raw_content.split("\n");
-
+    QRegExp noise_reg("(?:联系我们|版权|Copyright)");
     int bestIdx = -1;
     int best_size = 20;
 
     for (int i = 0; i < list.size(); i++) {
-        if (QString(list.at(i).toUtf8()).contains(reg) && list.at(i).size() > best_size) {
+        QString bytes(list.at(i).toUtf8());
+        if (bytes.contains(reg)  && !bytes.contains(noise_reg) && list.at(i).size() > best_size) {
             bestIdx = i;
             best_size = list.at(i).size();
         }
@@ -51,7 +54,8 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
         int max_intervals = 6;
         int min_idx = bestIdx;
         for (int i = bestIdx - 1;  i >= 0; i--) {
-            if (QString(list.at(i).toUtf8()).contains(reg) && list.at(i).size() > base_size) {
+            QString bytes(list.at(i).toUtf8());
+            if (bytes.contains(reg)  && !bytes.contains(noise_reg) && list.at(i).size() > base_size) {
                 min_idx = i;
             };
             if (i < min_idx - max_intervals) {
@@ -61,7 +65,8 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
 
         int max_idx = bestIdx;
         for (int i = bestIdx + 1; i < list.size(); i++) {
-            if (QString(list.at(i).toUtf8()).contains(reg) && list.at(i).size() > base_size) {
+            QString bytes(list.at(i).toUtf8());
+            if (bytes.contains(reg)  && !bytes.contains(noise_reg) && list.at(i).size() > base_size) {
                 max_idx = i;
             };
             if (i > max_idx + max_intervals) {

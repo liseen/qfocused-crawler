@@ -45,13 +45,15 @@ INCLUDEPATH  = /opt/qcrawler-thirdparty/include
 LIBS = -L/opt/qcrawler-thirdparty/lib -L/usr/local/lib -lprotobuf -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached -lurlqueue
 
 QMAKE_RPATHDIR = /opt/qcrawler-thirdparty/lib $$QMAKE_RPATHDIR
+QT += network webkit testlib
 
-isEmpty(OUTPUT_DIR) {
-    CONFIG(release):OUTPUT_DIR=$$PWD
-    CONFIG(debug):OUTPUT_DIR=$$PWD
-}
+CONFIG += release
+OUTPUT_DIR = /opt/qcrawler
 
-target.path=$OUTPUT_DIR/bin
+target.path=$$OUTPUT_DIR/bin
 INSTALLS += target
 
-QT += network webkit testlib
+configuration.path=$$OUTPUT_DIR/etc
+configuration.files=etc/*
+INSTALLS += configuration
+

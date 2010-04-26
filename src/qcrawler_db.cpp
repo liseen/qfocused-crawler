@@ -94,5 +94,3 @@ bool QCrawlerDB::updateUrlStatus(const QString &url, int status) {
     return true;
 }
 
-
-

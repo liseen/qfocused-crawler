@@ -6,15 +6,13 @@ export LC_ALL='en_US.UTF8'
 export LD_LIBRARY_PATH=/opt/qcrawler-thirdparty/lib:$LD_LIBRARY_PATH
 export PATH=/opt/qcrawler-thirdparty/bin:$PATH
 
-BIN=$(readlink -f -- $(dirname -- "$0"))
-cd $BIN/..
+DATA_DIR=/export/m1/qcrawler/data
+LOG_DIR=/export/m1/qcrawler/log
 
-LOGFILE=log/qcrawler-url-ttserver.log
-DATAFILE=data/qcrawler-url.tch
+test -d $DATA_DIR || mkdir -p $DATA_DIR
+test -d $LOG_DIR || mkdir -p $LOG_DIR
 
-test -d log || mkdir -p log
-test -d data || mkdir -p data
+LOG_FILE=$LOG_DIR/qcrawler-url.log
 
 #xmsiz=536870912 512M at least
-exec ttserver -port 1979 -thnum 10 -log "$LOGFILE" -le "${DATAFILE}#bnum=10000000#opts=lb#rcnum=5000"
-#ttserver -port 1979 -thnum 10 -le "${DATAFILE}#bnum=1000000#opts=lb#rcnum=5000"
+exec ttserver -port 19860 -thnum 40 -log ${LOG_FILE} -le "${DATA_DIR}/qcrawler-url.tch#bnum=10000000#opts=lb#rcnum=5000#opts=l#xmsiz=536870912"

@@ -26,7 +26,7 @@ class QCrawler : public QObject
     Q_OBJECT
 
 public:
-    QCrawler();
+    QCrawler(QCrawlerUrlQueue *uq);
     ~QCrawler();
 
     void start();

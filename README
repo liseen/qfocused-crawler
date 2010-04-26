@@ -1,1 +1,8 @@
 A focused crawler framework based on qt platform
+
+
+
+start xvfb
+start urlqueued
+
+start qcrawler

@@ -5,32 +5,6 @@
 #include <iostream>
 
 int QCrawlerGetTask::process(QCrawlerRecord &rec) {
-    static int first_time = true;
-
-    if (first_time) {
-        first_time = false;
-
-        std::string url;
-        while (std::cin >> url) {
-            QUrl qurl(QString::fromUtf8(url.c_str()));
-            if (qurl.isValid()) {
-                QCrawlerUrl c_url;
-                QString host = qurl.host();
-                if (host.size() < 1) {
-                    continue;
-                }
-
-                c_url.set_url(qurl.toString());
-                c_url.set_crawl_level(0);
-                c_url.set_crawl_type(QCrawlerUrl::HOST_RESTRICTED);
-                c_url.set_status(QCrawlerUrl::NOT_EXIST);
-                QByteArray bytes;
-                c_url.serialize_to_bytes(bytes);
-                url_queue->push(host, bytes);
-            }
-        }
-    }
-
     QCrawlerUrl& crawl_url = rec.crawl_url();
 
     bool valid = false;

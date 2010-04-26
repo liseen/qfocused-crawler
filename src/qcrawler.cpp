@@ -22,14 +22,9 @@ void QCrawler::start() {
     }
 }
 
-QCrawler::QCrawler(){
+QCrawler::QCrawler(QCrawlerUrlQueue *uq) {
     db = new QCrawlerDB();
-
-    if (QCrawlerConfig::getInstance()->enable_central_queue()) {
-        url_queue = new QCrawlerCentralQueue();
-    } else {
-        url_queue = new QCrawlerUrlQueue();
-    }
+    url_queue = uq;
 
     freq_control = new QCrawlerFreqControl();
 
