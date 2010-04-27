@@ -4,14 +4,15 @@
 
 QString QCrawlerSimpleExtractor::extractTitle(const QString &raw_title)
 {
-    QStringList tl = raw_title.split(QRegExp("[_-——|]"));
+    QRegExp numExp("\\s*\\d+");
+    QStringList tl = raw_title.split(QRegExp("\\s*(?:_|-|——|\\|)\\s*"));
     if (tl.size() > 1) {
         int max_len = -1;
         int max_idx = -1;
         for ( int i = 0; i < tl.size(); i++) {
             QString cad_title = tl.at(i);
             cad_title = cad_title.trimmed();
-            if (cad_title.size() > max_len && !cad_title.endsWith(QString::fromUtf8("网"))) {
+            if (cad_title.size() > max_len && !cad_title.endsWith(QString::fromUtf8("网")) && !numExp.exactMatch(cad_title)) {
                 max_len = tl.at(i).size();
                 max_idx = i;
             }

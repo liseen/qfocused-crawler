@@ -10,9 +10,9 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     int crawl_level = rec.crawl_url().crawl_level();
     QString anchor_text = rec.crawl_url().anchor_text();
     QString raw_html = rec.raw_html();
-    QString raw_title = rec.raw_title();
-    QString raw_content = rec.raw_content();
-    QString raw_content_md5 = md5_hash(raw_content);
+//    QString raw_title = rec.raw_title();
+//    QString raw_content = rec.raw_content();
+    QString raw_content_md5 = md5_hash(rec.raw_content());
 
     int download_time = rec.download_time();
     int last_modified = rec.last_modified();
@@ -28,8 +28,8 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     tcmapput2(cols, "crawl_level", QByteArray::number(crawl_level).constData());
     tcmapput2(cols, "anchor_text", anchor_text.toUtf8().constData());
     tcmapput2(cols, "raw_html", raw_html.toUtf8().constData());
-    tcmapput2(cols, "raw_title", raw_title.toUtf8().constData());
-    tcmapput2(cols, "raw_content", rec.raw_content().toUtf8().constData());
+//    tcmapput2(cols, "raw_title", raw_title.toUtf8().constData());
+//    tcmapput2(cols, "raw_content", rec.raw_content().toUtf8().constData());
     tcmapput2(cols, "raw_content_md5", md5_hash(rec.raw_content()).toUtf8().constData());
 
     tcmapput2(cols, "title", rec.title().toUtf8().constData());
