@@ -51,6 +51,7 @@ CONFIG += release
 OUTPUT_DIR = /opt/qcrawler
 
 target.path=$$OUTPUT_DIR/bin
+target.files=./qcrawler bin/*
 INSTALLS += target
 
 configuration.path=$$OUTPUT_DIR/etc
