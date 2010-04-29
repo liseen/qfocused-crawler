@@ -34,17 +34,21 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
     // best blocks
     // combine
     QString main_content;
-    QRegExp reg("(?:、|，|。|？|,|。)");
+    QRegExp reg(QString::fromUtf8("(?:、|，|。|,)"));
     QStringList list = raw_content.split("\n");
-    QRegExp noise_reg("(?:联系我们|版权|Copyright)");
+    QRegExp noise_reg(QString::fromUtf8("(?:联系我们|版权|Copyright)"));
     int bestIdx = -1;
     int best_size = 20;
 
     for (int i = 0; i < list.size(); i++) {
-        QString bytes(list.at(i).toUtf8());
-        if (bytes.contains(reg)  && !bytes.contains(noise_reg) && list.at(i).size() > best_size) {
+        QString block = list.at(i);
+        if (block.size() <= 0) {
+            continue;
+        }
+        float punc_ratio = ((float)block.count(reg))/block.size();
+        if (punc_ratio < 0.3 && punc_ratio > 0.05 && !block.contains(noise_reg) && block.size() > best_size) {
             bestIdx = i;
-            best_size = list.at(i).size();
+            best_size = block.size();
         }
     }
 
@@ -55,8 +59,8 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
         int max_intervals = 6;
         int min_idx = bestIdx;
         for (int i = bestIdx - 1;  i >= 0; i--) {
-            QString bytes(list.at(i).toUtf8());
-            if (bytes.contains(reg)  && !bytes.contains(noise_reg) && list.at(i).size() > base_size) {
+            QString block = list.at(i);
+            if (block.contains(reg) && !block.contains(noise_reg) && list.at(i).size() > base_size) {
                 min_idx = i;
             };
             if (i < min_idx - max_intervals) {
@@ -66,8 +70,8 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
 
         int max_idx = bestIdx;
         for (int i = bestIdx + 1; i < list.size(); i++) {
-            QString bytes(list.at(i).toUtf8());
-            if (bytes.contains(reg)  && !bytes.contains(noise_reg) && list.at(i).size() > base_size) {
+            QString block = list.at(i);
+            if (block.contains(reg) && !block.contains(noise_reg) && block.size() > base_size) {
                 max_idx = i;
             };
             if (i > max_idx + max_intervals) {
