@@ -46,7 +46,8 @@ QString QCrawlerSimpleExtractor::extractMainContent(const QString &raw_content) 
             continue;
         }
         float punc_ratio = ((float)block.count(reg))/block.size();
-        if (punc_ratio < 0.3 && punc_ratio > 0.05 && !block.contains(noise_reg) && block.size() > best_size) {
+
+        if (punc_ratio < 0.3 && punc_ratio > 0.04 && !block.contains(noise_reg) && block.size() > best_size) {
             bestIdx = i;
             best_size = block.size();
         }
