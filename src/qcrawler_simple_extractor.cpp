@@ -5,7 +5,7 @@
 QString QCrawlerSimpleExtractor::extractTitle(const QString &raw_title)
 {
     QRegExp numExp("\\s*\\d+");
-    QStringList tl = raw_title.split(QRegExp("\\s*(?:_|-|——|\\|)\\s*"));
+    QStringList tl = raw_title.split(QRegExp(QString::fromUtf8("\\s*(?:_|-|——|\\|)\\s*")));
     if (tl.size() > 1) {
         int max_len = -1;
         int max_idx = -1;
@@ -17,7 +17,7 @@ QString QCrawlerSimpleExtractor::extractTitle(const QString &raw_title)
                 max_idx = i;
             }
         }
-        if (max_idx > -1) {
+        if (max_idx > -1 && max_len > 3) {
             return tl.at(max_idx);
         }
     } else if (tl.size() == 1) {

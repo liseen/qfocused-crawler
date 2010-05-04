@@ -35,7 +35,7 @@ my $res = $qry->search();
 foreach my $rkey (@$res){
     my $rcols = $rdb->get($rkey);
     my @fields;
-    my $url = $rkey;
+    my $url = $rcols->{url};
     next if $url =~ /\n/;
 
     push @fields, $rcols->{download_time};
@@ -52,7 +52,7 @@ foreach my $rkey (@$res){
     $title =~ s/[\t\r\n]/ /gs;
     push @fields, $title;
     my $content = $rcols->{content};
-    next if length($content) < 100;
+    next if length($content) < 200;
     $content =~ s/[\t\r\n]/ /gs;
     push @fields, $content;
 
