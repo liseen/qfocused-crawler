@@ -18,8 +18,6 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     int last_modified = rec.last_modified();
     int loading_time =  rec.loading_time();
 
-    int key_size = url.size();
-
     TCMAP *cols = tcmapnew();
     tcmapput2(cols, "url", url.toUtf8().constData());
     tcmapput2(cols, "host", host.toUtf8().constData());
@@ -40,7 +38,7 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     tcmapput2(cols, "loading_time", QByteArray::number(loading_time).constData());
 
     bool status = true;
-    if(!tcrdbtblput(record_db, url.toUtf8().constData(), key_size, cols)){
+    if(!tcrdbtblput(record_db, url.toUtf8().constData(), url.toUtf8().size(), cols)){
         int ecode = tcrdbecode(record_db);
         fprintf(stderr, "store record put error: %s\n",  tcrdberrmsg(ecode));
         status = false;
