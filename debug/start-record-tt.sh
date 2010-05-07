@@ -15,4 +15,4 @@ test -d $LOG_DIR || mkdir -p $LOG_DIR
 
 LOG_FILE=$LOG_DIR/qcrawler-record.log
 
-exec ttserver -port 19851 -thnum 30  -dmn -pid /tmp/qcrawler-record.pid -le -log ${LOG_FILE} "${DATA_DIR}/qcrawler-record.tct#bnum=100000#opts=lb#rcnum=200#xmsiz=536870#idx=download_time:dec"
+exec ttserver -port 19851 -thnum 30 -dmn -pid /tmp/qcrawler-record.pid -le -log ${LOG_FILE} "${DATA_DIR}/qcrawler-record.tct#bnum=100000#opts=l#rcnum=200#xmsiz=536870#idx=download_time:dec"

@@ -10,4 +10,15 @@ export DISPLAY=:99
 
 test -d /export/m1/qcrawler/log/ || mkdir -p /export/m1/qcrawler/log/
 
-/opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf > /export/m1/qcrawler/log/$$
+PROCESSES=$1
+if [ -z $PROCESSES ]; then
+    /opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf > /export/m1/qcrawler/log/$$ &
+
+else
+    for i in  `seq 1 $PROCESSES`;
+    do
+        /opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf > /export/m1/qcrawler/log/$$ &
+        sleep 1;
+    done
+fi
+
