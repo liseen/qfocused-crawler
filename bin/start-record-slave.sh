@@ -16,7 +16,7 @@ test -d $LOG_DIR || mkdir -p $LOG_DIR
 test -d $ULOG_DIR || mkdir -p $ULOG_DIR
 
 LOG_FILE=$LOG_DIR/qcrawler-record.log
-RTS_FILE=$DATA_DIR/qcrawler-record/71.rts
+RTS_FILE=$DATA_DIR/71.rts
 
 DAEMON="-dmn -pid ${LOG_DIR}/qcrawler-record.pid -le -log ${LOG_FILE} "
 
