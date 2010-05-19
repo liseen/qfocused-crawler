@@ -28,10 +28,20 @@ public:
         record_db_host = crawler_config->record_db_host();
         record_db_port = crawler_config->record_db_port();
 
+        html_record_db_host = crawler_config->html_record_db_host();
+        html_record_db_port = crawler_config->html_record_db_port();
+
         //config
         record_db = tcrdbnew();
         if(!tcrdbopen(record_db, record_db_host.toUtf8().constData(), record_db_port)){
             int ecode = tcrdbecode(record_db);
+            fprintf(stderr, "open record db error: %s\n", tcrdberrmsg(ecode));
+            exit(1);
+        }
+
+        html_record_db = tcrdbnew();
+        if(!tcrdbopen(html_record_db, html_record_db_host.toUtf8().constData(), html_record_db_port)){
+            int ecode = tcrdbecode(html_record_db);
             fprintf(stderr, "open record db error: %s\n", tcrdberrmsg(ecode));
             exit(1);
         }
@@ -54,7 +64,7 @@ public:
         tcrdbdel(record_db);
     }
 
-    bool storeRecord(const QCrawlerRecord &rec);
+    bool storeRecord(QCrawlerRecord &rec);
     bool getUrlStatus(QString url, QCrawlerUrl::Status *url_status);
     bool updateUrlStatus(const QString &url, int);
 
@@ -69,6 +79,10 @@ private:
     TCRDB *url_hash_db;
     QString url_hash_db_host;
     int url_hash_db_port;
+
+    TCRDB *html_record_db;
+    QString html_record_db_host;
+    int html_record_db_port;
 };
 
 #endif

@@ -6,18 +6,20 @@ export LC_ALL='en_US.UTF8'
 export LD_LIBRARY_PATH=/opt/qcrawler-thirdparty/lib:$LD_LIBRARY_PATH
 export PATH=/opt/qcrawler-thirdparty/bin:$PATH
 
-export DISPLAY=:99
 
-test -d /export/m1/qcrawler/log/ || mkdir -p /export/m1/qcrawler/log/
+LOG_DIR=/export/m1/qcrawler/crawler_log/
+test -d $LOG_DIR || mkdir -p $LOG_DIR
 
 PROCESSES=$1
-if [ -z $PROCESSES ]; then
-    /opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf > /export/m1/qcrawler/log/$$ &
+log_file=$$
 
+if [ -z $PROCESSES ]; then
+    DISPLAY=:99 /opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf
 else
+    rm -rf $LOG_DIR/*.log 
     for i in  `seq 1 $PROCESSES`;
     do
-        /opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf > /export/m1/qcrawler/log/$$ &
+	xvfb-run -a -server-num=100 --server-args="-shmem -dpi 96 -screen 0 1024x768x24" /opt/qcrawler/bin/qcrawler crawl --conf=/opt/qcrawler/etc/qcrawler.conf > $LOG_DIR/${log_file}_$i.log &
         sleep 1;
     done
 fi

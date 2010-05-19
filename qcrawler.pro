@@ -42,7 +42,7 @@ HEADERS +=\
     src/qcrawler_common.h
 
 INCLUDEPATH  = /opt/qcrawler-thirdparty/include
-LIBS = -L/opt/qcrawler-thirdparty/lib -L/usr/local/lib -lprotobuf -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -llog4cxx -lmemcached -lurlqueue
+LIBS = -L/opt/qcrawler-thirdparty/lib -L/usr/local/lib -lprotobuf -ltokyotyrant -ltokyocabinet -lz -lbz2 -lresolv -lnsl -ldl -lrt -lpthread -lm -lc -lmemcached -lurlqueue
 
 QMAKE_RPATHDIR = /opt/qcrawler-thirdparty/lib $$QMAKE_RPATHDIR
 QT += network webkit testlib

@@ -59,7 +59,7 @@ bool QCrawlerFocusFilter::urlFilter(QCrawlerRecord &rec) {
                     rec.focused_links().last().set_crawl_type(crawl_type);
                     rec.focused_links().last().set_status(url_status);
                 }
-            } else if (crawl_type == QCrawlerUrl::UPDATE) { // update , we don't extract sub links
+            } else if (crawl_type == QCrawlerUrl::UPDATE) { // update , we need't extract sub links
                 break;
             } else {
 

@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QStringList>
 #include <QUrl>
 #include <QDebug>
 
@@ -22,7 +23,7 @@ static void print_usage(FILE* out, int exit_code)
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
-    QString conf_file = "etc/qcrawler.conf.default";
+    QString conf_file = "etc/qcrawler.conf";
 
     const QStringList args = app.arguments();
 
@@ -70,15 +71,29 @@ int main(int argc, char* argv[]) {
            if (line.isEmpty()) {
                continue;
            }
-           QUrl qurl(line, QUrl::StrictMode);
+
+           QStringList list = line.split("\t");
+           if (list.size() < 1) {
+               continue;
+           }
+
+           QUrl qurl(list.at(0), QUrl::StrictMode);
            if (qurl.isValid()) {
                 QCrawlerUrl c_url;
                 QString host = qurl.host();
-
                 c_url.set_url(qurl.toString());
                 c_url.set_crawl_level(0);
-                c_url.set_crawl_type(QCrawlerUrl::HOST_RESTRICTED);
-                c_url.set_status(QCrawlerUrl::NOT_EXIST);
+                QString type =  "host_restricted";
+                if (list.size() > 1) {
+                    type = list.at(1);
+                }
+
+                if (type == "host_restricted") {
+                    c_url.set_crawl_type(QCrawlerUrl::HOST_RESTRICTED);
+                } else if (type == "update") {
+                    c_url.set_crawl_type(QCrawlerUrl::UPDATE);
+                }
+
                 QByteArray bytes;
                 c_url.serialize_to_bytes(bytes);
                 url_queue->push(host, bytes);

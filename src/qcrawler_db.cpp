@@ -1,7 +1,7 @@
 #include "qcrawler_db.h"
 
 
-bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
+bool QCrawlerDB::storeRecord(QCrawlerRecord &rec) {
     QString url = rec.crawl_url().url();
     QString host = rec.crawl_url().host();
     QString url_md5 = md5_hash(url);
@@ -14,6 +14,7 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
 //    QString raw_content = rec.raw_content();
     QString raw_content_md5 = md5_hash(rec.raw_content());
 
+    int links_size = rec.raw_sub_links().size();
     int download_time = rec.download_time();
     int last_modified = rec.last_modified();
     int loading_time =  rec.loading_time();
@@ -25,25 +26,33 @@ bool QCrawlerDB::storeRecord(const QCrawlerRecord &rec) {
     tcmapput2(cols, "parent_url_md5", parent_url_md5.toUtf8().constData());
     tcmapput2(cols, "crawl_level", QByteArray::number(crawl_level).constData());
     tcmapput2(cols, "anchor_text", anchor_text.toUtf8().constData());
-    tcmapput2(cols, "raw_html", raw_html.toUtf8().constData());
+//    tcmapput2(cols, "raw_html", raw_html.toUtf8().constData());
 //    tcmapput2(cols, "raw_title", raw_title.toUtf8().constData());
 //    tcmapput2(cols, "raw_content", rec.raw_content().toUtf8().constData());
-    tcmapput2(cols, "raw_content_md5", md5_hash(rec.raw_content()).toUtf8().constData());
+//    tcmapput2(cols, "raw_content_md5", md5_hash(rec.raw_content()).toUtf8().constData());
 
     tcmapput2(cols, "title", rec.title().toUtf8().constData());
     tcmapput2(cols, "content", rec.content().toUtf8().constData());
 
+    tcmapput2(cols, "links_size", QByteArray::number(links_size).constData());
     tcmapput2(cols, "download_time", QByteArray::number(download_time).constData());
     tcmapput2(cols, "last_modified", QByteArray::number(last_modified).constData());
     tcmapput2(cols, "loading_time", QByteArray::number(loading_time).constData());
 
     bool status = true;
-    if(!tcrdbtblput(record_db, url.toUtf8().constData(), url.toUtf8().size(), cols)){
+    if(!tcrdbtblput(record_db, url_md5.toUtf8().constData(), url_md5.toUtf8().size(), cols)){
         int ecode = tcrdbecode(record_db);
         fprintf(stderr, "store record put error: %s\n",  tcrdberrmsg(ecode));
         status = false;
     }
     tcmapdel(cols);
+
+    // raw_html store
+    if (!tcrdbput2(html_record_db, url_md5.toUtf8().constData(), raw_html.toUtf8().constData())) {
+        int ecode = tcrdbecode(url_hash_db);
+        fprintf(stderr, "update url status put error: %s\n",  tcrdberrmsg(ecode));
+        return false;
+    }
 
     return status;
 }

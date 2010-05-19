@@ -15,4 +15,4 @@ test -d $LOG_DIR || mkdir -p $LOG_DIR
 LOG_FILE=$LOG_DIR/qcrawler-url.log
 
 #xmsiz=536870912 512M at least
-exec ttserver -port 19860 -thnum 40 -dmn -pid /tmp/qcrawler-url.pid -le -log ${LOG_FILE} "${DATA_DIR}/qcrawler-url.tch#bnum=100000#opts=lb#rcnum=500#opts=l#xmsiz=536870"
+exec ttserver -port 19860 -thnum 40 -dmn -pid /tmp/qcrawler-url.pid -le -log ${LOG_FILE} "${DATA_DIR}/qcrawler-url.tch#bnum=100000#opts=l#rcnum=500#opts=l#xmsiz=536870"

@@ -148,10 +148,33 @@ int QCrawlerConfig::record_db_port() {
     settings->endGroup();
 
     if (port.isEmpty()) {
-        return 1978;
+        return 9870;
     }
     return port.toInt();
 }
+
+QString QCrawlerConfig::html_record_db_host() {
+    settings->beginGroup("html_record_db");
+    QString host = settings->value("host").toString();
+    settings->endGroup();
+
+    if (host.isEmpty()) {
+        return "localhost";
+    }
+    return host;
+}
+
+int QCrawlerConfig::html_record_db_port() {
+    settings->beginGroup("html_record_db");
+    QString port = settings->value("port").toString();
+    settings->endGroup();
+
+    if (port.isEmpty()) {
+        return 9860;
+    }
+    return port.toInt();
+}
+
 
 QString QCrawlerConfig::url_queue_server() {
     settings->beginGroup("url_queue");

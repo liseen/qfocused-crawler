@@ -34,6 +34,10 @@ public:
     QString record_db_host();
     int record_db_port();
 
+    QString html_record_db_host();
+    int html_record_db_port();
+
+
     QString url_queue_server();
 
     QString freq_control_memcached_servers();
