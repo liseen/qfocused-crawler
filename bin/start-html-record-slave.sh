@@ -6,10 +6,10 @@ export LC_ALL='en_US.UTF8'
 export LD_LIBRARY_PATH=/opt/qcrawler-thirdparty/lib:$LD_LIBRARY_PATH
 export PATH=/opt/qcrawler-thirdparty/bin:$PATH
 
-DATA_DIR=/tmp/qcrawler/data
-LOG_DIR=/tmp/qcrawler/log
-ULOG_DIR=/tmp/qcrawler/ulog
-
+ROOT_DIR=/export/m2
+DATA_DIR=$ROOT_DIR/qcrawler-html/data
+LOG_DIR=$ROOT_DIR/qcrawler-html/log
+ULOG_DIR=$ROOT_DIR/qcrawler-html/ulog
 
 test -d $DATA_DIR || mkdir -p $DATA_DIR
 test -d $LOG_DIR || mkdir -p $LOG_DIR
