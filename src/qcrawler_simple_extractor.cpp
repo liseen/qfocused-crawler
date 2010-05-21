@@ -5,7 +5,7 @@
 QString QCrawlerSimpleExtractor::extractTitle(const QString &raw_title)
 {
     QRegExp numExp("\\s*\\d+");
-    QStringList tl = raw_title.split(QRegExp(QString::fromUtf8("\\s*(?:_|-|——|\\|)\\s*")));
+    QStringList tl = raw_title.split(QRegExp(QString::fromUtf8("\\s*(?:_|-|—|\\|)\\s*")));
     if (tl.size() > 1) {
         int max_len = -1;
         int max_idx = -1;

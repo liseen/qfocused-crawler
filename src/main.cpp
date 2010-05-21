@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
             QString raw_content = list.at(2);
             QString content = extractor->extractMainContent(raw_content.replace("\x01", "\n"));
             if (content.size() < 100) {
-                continue;
+                //continue;
             }
             content.replace("\n", " ");
 

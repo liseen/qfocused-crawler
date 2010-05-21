@@ -19,6 +19,7 @@ LOG_FILE=$LOG_DIR/qcrawler-html.log
 RTS_FILE=$DATA_DIR/61.rts
 
 DAEMON="-dmn -pid ${LOG_DIR}/qcrawler-html.pid  -le -log ${LOG_FILE}"
+#DAEMON=""
 
-exec ttserver -port 9860 -ulog ${ULOG_DIR} -sid 61 -thnum 32 -mul 16 ${DAEMON} -mport 9860 -mhost 192.168.10.176 -rts ${RTS_FILE} \
-    "${DATA_DIR}/qcrawler-html.tch#bnum=100000000#opts=lb#rcnum=5000#xmsiz=536870912"
+exec ttserver -port 9860 -ulog ${ULOG_DIR} -sid 61 -thnum 32 -mul 16 ${DAEMON} -mhost 192.168.10.176 -mport 9860 -rts ${RTS_FILE} \
+    "${DATA_DIR}/qcrawler-html.tch#bnum=100000000#opts=lb#rcnum=5000#xmsiz=134217728"

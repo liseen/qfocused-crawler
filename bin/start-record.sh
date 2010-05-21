@@ -18,5 +18,7 @@ test -d $ULOG_DIR || mkdir -p $ULOG_DIR
 LOG_FILE=$LOG_DIR/qcrawler-record.log
 
 DAEMON="-dmn -pid ${LOG_DIR}/qcrawler-record.pid -le -log ${LOG_FILE} "
+#DAEMON=""
+
 exec ttserver -port 9870 -uas -ulog ${ULOG_DIR} -sid 70 -thnum 32 -mul 16 ${DAEMON}   \
-    "${DATA_DIR}/qcrawler-record.tct#bnum=10000000#opts=lb#rcnum=2000#xmsiz=536870912"
+    "${DATA_DIR}/qcrawler-record.tct#bnum=10000000#opts=lb#rcnum=2000#xmsiz=134217728"

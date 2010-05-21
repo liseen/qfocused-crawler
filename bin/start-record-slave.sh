@@ -19,6 +19,7 @@ LOG_FILE=$LOG_DIR/qcrawler-record.log
 RTS_FILE=$DATA_DIR/71.rts
 
 DAEMON="-dmn -pid ${LOG_DIR}/qcrawler-record.pid -le -log ${LOG_FILE} "
+#DAEMON=""
 
 exec ttserver -port 9870 -ulog ${ULOG_DIR} -sid 71 -thnum 32 -mul 16 ${DAEMON} -mhost 192.168.10.176 -mport 9870 -rts $RTS_FILE \
-    "${DATA_DIR}/qcrawler-record.tct#bnum=10000000#opts=lb#rcnum=2000#xmsiz=536870912#idx=download_time:dec#idx=host:lex"
+    "${DATA_DIR}/qcrawler-record.tct#bnum=10000000#opts=lb#rcnum=2000#xmsiz=134217728#idx=download_time:dec#idx=host:lex"
